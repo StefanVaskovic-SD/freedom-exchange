@@ -312,7 +312,7 @@ const AccountDetail: React.FC = () => {
 				<div>
 					<div className="text-[28px] mb-2 font-normal">{config.display}</div>
 					{accountId === 'currentAccount' && (
-						<p className="text-[#716860] text-base mb-4">Funds available to spend</p>
+						<p className="text-[#FFFFFFB2] text-base mb-4">Funds available to spend</p>
 					)}
 
 					{/* Currency Tabs - only for currentAccount */}
@@ -326,10 +326,10 @@ const AccountDetail: React.FC = () => {
 										<button
 											key={code}
 											onClick={() => setSelectedCurrency(code)}
-											className={`flex items-center gap-1.5 py-2 rounded-full text-sm font-normal transition-colors border ${
+											className={`flex items-center gap-1.5 py-2 rounded-[12px] text-sm font-normal transition-colors border bg-[#211E1E] text-white ${
 												isActive
 													? 'border-white px-5'
-													: 'border-[#716860]/30 px-4'
+													: 'border-[#211E1E] px-4'
 											}`}
 										>
 											<img src={`/${code.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={code} />
