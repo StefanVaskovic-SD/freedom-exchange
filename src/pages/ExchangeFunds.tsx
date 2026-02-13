@@ -255,7 +255,7 @@ export const ExchangeFunds: React.FC = () => {
             disabled={!isValidAmount}
             className={`w-full h-14 text-xl rounded-lg font-normal ${
               isValidAmount
-                ? 'bg-[#A488F5] hover:bg-[#9575e8] text-white'
+                ? 'bg-[#A488F5] hover:bg-[#9575e8] text-white dark:text-black'
                 : 'bg-[#2a2626] text-[#716860] cursor-not-allowed'
             }`}
           >

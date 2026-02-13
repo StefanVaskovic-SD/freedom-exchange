@@ -61,7 +61,7 @@ export const ExchangeSuccess: React.FC = () => {
       <div className="w-full">
         <Button
           onClick={handleBackToHome}
-          className="w-full h-14 bg-[#A488F5] hover:bg-[#9575e8] text-black font-normal text-xl rounded-lg"
+          className="w-full h-14 bg-[#A488F5] hover:bg-[#9575e8] text-white dark:text-black font-normal text-xl rounded-lg"
         >
           Preview transaction
         </Button>

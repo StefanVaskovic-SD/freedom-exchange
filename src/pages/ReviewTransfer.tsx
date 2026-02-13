@@ -203,7 +203,7 @@ export const ReviewTransfer: React.FC = () => {
 				<div className="">
 					<Button
 						onClick={handleMoveFunds}
-						className="w-full h-14 bg-[#A488F5] hover:bg-[#9575e8] text-white font-normal text-xl rounded-lg"
+						className="w-full h-14 bg-[#A488F5] hover:bg-[#9575e8] text-white dark:text-black font-normal text-xl rounded-lg"
 					>
 						Move funds
 					</Button>

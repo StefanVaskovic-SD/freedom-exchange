@@ -57,7 +57,7 @@ export const TransferConfirmed: React.FC = () => {
 				<div className="w-full mb-8">
 					<Button
 						onClick={handleBackToHome}
-						className="w-full h-14 bg-[#A488F5] hover:bg-[#9575e8] text-white font-normal text-xl rounded-lg"
+						className="w-full h-14 bg-[#A488F5] hover:bg-[#9575e8] text-white dark:text-black font-normal text-xl rounded-lg"
 					>
 						Back to home
 					</Button>

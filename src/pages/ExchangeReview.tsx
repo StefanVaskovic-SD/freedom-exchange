@@ -63,7 +63,7 @@ export const ExchangeReview: React.FC = () => {
           </p>
         </div>
 
-        <div className="w-full h-px mb-6" style={{ background: 'rgba(255, 255, 255, 0.1)' }} />
+        <div className="w-full h-px mb-6 bg-[#211E1E26] dark:bg-[rgba(255,255,255,0.1)]" />
 
         {/* Details */}
         <div className="space-y-5 mb-8">
@@ -86,7 +86,7 @@ export const ExchangeReview: React.FC = () => {
             <span className="text-foreground text-lg font-normal">No fees</span>
           </div>
 
-          <div className="w-full h-px" style={{ background: 'rgba(255, 255, 255, 0.1)' }} />
+          <div className="w-full h-px bg-[#211E1E26] dark:bg-[rgba(255,255,255,0.1)]" />
 
           <div className="flex items-center justify-between">
             <span className="text-[#716860] dark:text-[#FFFFFFB2] text-base">Estimated total</span>
@@ -98,7 +98,7 @@ export const ExchangeReview: React.FC = () => {
         <div className="mt-auto">
           <Button
             onClick={handleExchange}
-            className="w-full h-14 bg-[#A488F5] hover:bg-[#9575e8] text-black font-normal text-xl rounded-lg"
+            className="w-full h-14 bg-[#A488F5] hover:bg-[#9575e8] text-white dark:text-black font-normal text-xl rounded-lg"
           >
             Exchange
           </Button>
