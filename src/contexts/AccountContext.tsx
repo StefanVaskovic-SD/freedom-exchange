@@ -61,7 +61,7 @@ export function getExchangeRate(fromCurrency: string, toCurrency: string): numbe
 }
 
 const DEFAULT_CURRENCY_BALANCES: Record<string, number> = {
-  GBP: 950.0,
+  GBP: 1040.0,
   EUR: 0,
   USD: 0,
 };
@@ -70,7 +70,7 @@ interface AccountContextType {
   accounts: Record<AccountType, Account>;
   transactions: Transaction[];
   updateBalance: (accountId: AccountType, newBalance: number) => void;
-  transferFunds: (from: AccountType, to: AccountType, amount: number) => void;
+  transferFunds: (from: AccountType, to: AccountType, amount: number, currency?: string) => void;
   exchangeFunds: (fromCurrency: string, toCurrency: string, fromAmount: number, toAmount: number) => void;
   getAccount: (accountId: AccountType) => Account;
 }
@@ -110,7 +110,7 @@ const INITIAL_ACCOUNTS: Record<AccountType, Account> = {
         <path d="M19.5 4.5H4.5C3.90326 4.5 3.33097 4.73705 2.90901 5.15901C2.48705 5.58097 2.25 6.15326 2.25 6.75V17.25C2.25 17.8467 2.48705 18.419 2.90901 18.841C3.33097 19.2629 3.90326 19.5 4.5 19.5H19.5C20.0967 19.5 20.669 19.2629 21.091 18.841C21.5129 18.419 21.75 17.8467 21.75 17.25V6.75C21.75 6.15326 21.5129 5.58097 21.091 5.15901C20.669 4.73705 20.0967 4.5 19.5 4.5ZM14.25 11.25C14.25 11.8467 14.0129 12.419 13.591 12.841C13.169 13.2629 12.5967 13.5 12 13.5C11.4033 13.5 10.831 13.2629 10.409 12.841C9.98705 12.419 9.75 11.8467 9.75 11.25C9.75 11.0511 9.67098 10.8603 9.53033 10.7197C9.38968 10.579 9.19891 10.5 9 10.5H3.75V9H20.25V10.5H15C14.8011 10.5 14.6103 10.579 14.4697 10.7197C14.329 10.8603 14.25 11.0511 14.25 11.25ZM4.5 6H19.5C19.6989 6 19.8897 6.07902 20.0303 6.21967C20.171 6.36032 20.25 6.55109 20.25 6.75V7.5H3.75V6.75C3.75 6.55109 3.82902 6.36032 3.96967 6.21967C4.11032 6.07902 4.30109 6 4.5 6Z" fill="currentColor"/>
       </svg>
     ),
-    balance: 950.0,
+    balance: 1040.0,
     color: '#E4B33D',
     currencyBalances: { ...DEFAULT_CURRENCY_BALANCES },
   },
@@ -195,18 +195,41 @@ export const AccountProvider: React.FC<{ children: ReactNode }> = ({ children })
     }));
   };
 
-  const transferFunds = useCallback((from: AccountType, to: AccountType, amount: number) => {
-    setAccounts(prev => ({
-      ...prev,
-      [from]: {
-        ...prev[from],
-        balance: prev[from].balance - amount
-      },
-      [to]: {
-        ...prev[to],
-        balance: prev[to].balance + amount
+  const transferFunds = useCallback((from: AccountType, to: AccountType, amount: number, currency: string = 'GBP') => {
+    setAccounts(prev => {
+      const updated = {
+        ...prev,
+        [from]: {
+          ...prev[from],
+          balance: prev[from].balance - amount
+        },
+        [to]: {
+          ...prev[to],
+          balance: prev[to].balance + amount
+        }
+      };
+
+      // If currentAccount is involved, also update currencyBalances
+      if (from === 'currentAccount') {
+        const cb = { ...(updated.currentAccount.currencyBalances || DEFAULT_CURRENCY_BALANCES) };
+        cb[currency] = (cb[currency] || 0) - amount;
+        updated.currentAccount = {
+          ...updated.currentAccount,
+          currencyBalances: cb,
+          balance: cb['GBP'] ?? updated.currentAccount.balance,
+        };
+      } else if (to === 'currentAccount') {
+        const cb = { ...(updated.currentAccount.currencyBalances || DEFAULT_CURRENCY_BALANCES) };
+        cb[currency] = (cb[currency] || 0) + amount;
+        updated.currentAccount = {
+          ...updated.currentAccount,
+          currencyBalances: cb,
+          balance: cb['GBP'] ?? updated.currentAccount.balance,
+        };
       }
-    }));
+
+      return updated;
+    });
 
     setTransactions(prev => {
       // Create transaction records for both accounts
@@ -220,7 +243,7 @@ export const AccountProvider: React.FC<{ children: ReactNode }> = ({ children })
         account: from,
         amount: -amount,
         date: timestamp,
-        recipient: `To ${from === 'pension' ? 'Pension' : from === 'savings' ? 'Savings' : 'Current Account'}`,
+        recipient: `To ${to === 'pension' ? 'Pension' : to === 'savings' ? 'Savings' : 'Current Account'}`,
         status: "completed"
       };
 

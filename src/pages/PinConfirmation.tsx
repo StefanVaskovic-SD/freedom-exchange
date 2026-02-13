@@ -39,7 +39,7 @@ export const PinConfirmation: React.FC = () => {
         transferExecutedRef.current = true;
         
         // Execute the transfer
-        transferFunds(sourceAccount, destinationAccount, amount);
+        transferFunds(sourceAccount, destinationAccount, amount, currency);
         
         // Navigate to confirmation page
         setTimeout(() => {
