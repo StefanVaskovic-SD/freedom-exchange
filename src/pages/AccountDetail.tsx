@@ -340,7 +340,7 @@ const AccountDetail: React.FC = () => {
 							</div>
 
 							{/* Currency Balance Card */}
-							<div className="bg-white dark:bg-[#211E1E] rounded-lg px-4 py-5 mb-4 flex flex-col justify-center h-[160px]">
+							<div className="bg-white dark:bg-[#211E1E] rounded-[9px] px-4 py-5 mb-4 flex flex-col justify-between h-[160px]">
 								<div className="flex items-center gap-3 mb-3">
 									<img src={`/${selectedCurrency.toLowerCase()}.png`} className="w-10 h-10 rounded-full object-cover" alt={selectedCurrency} />
 									<span className="text-foreground text-lg font-normal">{selectedCurrency}</span>
@@ -359,7 +359,7 @@ const AccountDetail: React.FC = () => {
 
 								{/* IBAN */}
 								<div className="flex items-center gap-2">
-									<span className="text-[#716860] text-sm">5728-4801446999-22</span>
+									<span className="text-[#716860] text-base">5728-4801446999-22</span>
 									<button 
 										onClick={() => navigator.clipboard?.writeText('5728480144699922')}
 										className="hover:opacity-80 transition-opacity"
