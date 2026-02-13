@@ -1,7 +1,7 @@
-import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { useAccounts, AccountType } from "@/contexts/AccountContext";
-import { ArrowLeft, ArrowDown, ArrowUp, ArrowRightLeft } from "lucide-react";
+import React, { useState } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useAccounts, AccountType, CURRENCY_INFO, WALLET_CURRENCIES } from "@/contexts/AccountContext";
+import { ArrowLeft, ArrowDown, ArrowUp, ArrowRightLeft, Copy } from "lucide-react";
 import { CreditCard } from "@/components/CreditCard";
 import { AccountActions } from "@/components/AccountActions";
 
@@ -160,12 +160,16 @@ function getTransactionIcon(type: string) {
 			return (
 				<ArrowRightLeft className="w-5 h-5 text-[#211E1E] dark:text-white" />
 			);
+		case "exchange":
+			return (
+				<ArrowRightLeft className="w-5 h-5 text-[#211E1E] dark:text-white" />
+			);
 		default:
 			return null;
 	}
 }
 
-function getTransactionLabel(type: string) {
+function getTransactionLabel(type: string, fromCurrency?: string, toCurrency?: string) {
 	switch (type) {
 		case "withdrawal":
 			return "Withdrawal";
@@ -173,6 +177,8 @@ function getTransactionLabel(type: string) {
 			return "Top up";
 		case "transfer":
 			return "Transfer";
+		case "exchange":
+			return `${fromCurrency || ''} ⇄ ${toCurrency || ''}`;
 		default:
 			return type;
 	}
@@ -200,8 +206,13 @@ function getMoveFundsButtonStyles(
 const AccountDetail: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
+	const location = useLocation();
 	const { accounts, transactions } = useAccounts();
 	const accountId = id as AccountType;
+
+	// Get selected currency from navigation state (for exchange flow redirect)
+	const initialCurrency = (location.state as any)?.selectedCurrency || 'GBP';
+	const [selectedCurrency, setSelectedCurrency] = useState<string>(initialCurrency);
 
 	if (!accountId || !(accountId in accounts)) {
 		return <div className="text-white p-8">Invalid account</div>;
@@ -252,6 +263,32 @@ const AccountDetail: React.FC = () => {
 		});
 	};
 
+	// Add onClick handlers to actions (for Exchange navigation)
+	const actionsWithHandlers = config.actions?.map(action => {
+		if (action.label === 'Exchange') {
+			return { ...action, onClick: () => navigate('/exchange') };
+		}
+		return action;
+	});
+
+	// Currency balance for current account tabs
+	const currencyBalances = account.currencyBalances || { GBP: account.balance, EUR: 0, USD: 0 };
+	const selectedCurrencyBalance = currencyBalances[selectedCurrency] || 0;
+	const selectedCurrencyInfo = CURRENCY_INFO[selectedCurrency];
+
+	const formatCurrencyBalance = (balance: number, currCode: string) => {
+		const info = CURRENCY_INFO[currCode];
+		const parts = balance
+			.toLocaleString("en-GB", {
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2,
+			})
+			.split(".");
+		const wholePart = parts[0];
+		const decimalPart = parts[1];
+		return { symbol: info.symbol, wholePart, decimalPart };
+	};
+
 	return (
 		<div className="min-h-screen bg-[#F3F3F3] dark:bg-black text-foreground max-w-[480px] mx-auto flex flex-col">
 			<div className="px-4 py-6 flex flex-col flex-1">
@@ -262,23 +299,82 @@ const AccountDetail: React.FC = () => {
 					<ArrowLeft className="w-6 h-6" />
 				</button>
 				<div>
-					{/* <div className="mb-2 text-sm opacity-50">{config.display}</div> */}
-					<div className="text-[28px] mb-4 font-normal">{config.display}</div>
-					<div className="rounded-lg bg-white dark:bg-[#211E1E] flex items-center justify-between pt-2 pb-2 pl-2 pr-5 mb-4">
-						<div className="flex items-center gap-2">
-							{/* TODO: Icon if needed */}
-							<div
-								className="w-12 h-12 flex items-center justify-center bg-[#000] dark:bg-[#000] rounded-[4px]"
-								style={{ color: account.color }}
-							>
-								<span className="text-2xl">{account.icon}</span>
+					<div className="text-[28px] mb-2 font-normal">{config.display}</div>
+					{accountId === 'currentAccount' && (
+						<p className="text-[#716860] text-base mb-4">Funds available to spend</p>
+					)}
+
+					{/* Currency Tabs - only for currentAccount */}
+					{accountId === 'currentAccount' && (
+						<>
+							<div className="flex gap-2 mb-4">
+								{WALLET_CURRENCIES.map(code => {
+									const info = CURRENCY_INFO[code];
+									const isActive = selectedCurrency === code;
+									return (
+										<button
+											key={code}
+											onClick={() => setSelectedCurrency(code)}
+											className={`px-4 py-2 rounded-full text-sm font-normal transition-colors border ${
+												isActive
+													? 'bg-[#211E1E] text-white border-[#211E1E] dark:bg-white dark:text-black dark:border-white'
+													: 'bg-transparent text-foreground border-[#716860]/30'
+											}`}
+										>
+											{code} ({info.symbol})
+										</button>
+									);
+								})}
 							</div>
-							<span className="text-xl font-normal text-foreground">Balance</span>
+
+							{/* Currency Balance Display */}
+							<div className="flex items-center gap-3 mb-2">
+								<span className="text-2xl">{selectedCurrencyInfo?.flag}</span>
+								<span className="text-foreground text-lg">{selectedCurrency}</span>
+								<span className="ml-auto">
+									{(() => {
+										const { symbol, wholePart, decimalPart } = formatCurrencyBalance(selectedCurrencyBalance, selectedCurrency);
+										return (
+											<span className="text-foreground">
+												<span className="text-[28px] font-normal">{symbol}{wholePart}</span>
+												<span className="text-[18px]">.{decimalPart}</span>
+											</span>
+										);
+									})()}
+								</span>
+							</div>
+
+							{/* IBAN */}
+							<div className="flex items-center gap-2 mb-4">
+								<span className="text-[#716860] text-sm">5728-4801446999-22</span>
+								<button 
+									onClick={() => navigator.clipboard?.writeText('5728480144699922')}
+									className="text-[#716860] hover:text-foreground transition-colors"
+								>
+									<Copy className="w-4 h-4" />
+								</button>
+							</div>
+						</>
+					)}
+
+					{/* Standard balance display for non-currentAccount */}
+					{accountId !== 'currentAccount' && (
+						<div className="rounded-lg bg-white dark:bg-[#211E1E] flex items-center justify-between pt-2 pb-2 pl-2 pr-5 mb-4">
+							<div className="flex items-center gap-2">
+								<div
+									className="w-12 h-12 flex items-center justify-center bg-[#000] dark:bg-[#000] rounded-[4px]"
+									style={{ color: account.color }}
+								>
+									<span className="text-2xl">{account.icon}</span>
+								</div>
+								<span className="text-xl font-normal text-foreground">Balance</span>
+							</div>
+							<div className="text-lg ml-2 font-normal text-foreground">
+								{formatCurrency(account.balance)}
+							</div>
 						</div>
-						<div className="text-lg ml-2 font-normal text-foreground">
-							{formatCurrency(account.balance)}
-						</div>
-					</div>
+					)}
+
 					{config.showCard && (
 						<div className="mb-4">
 							<CreditCard
@@ -292,9 +388,9 @@ const AccountDetail: React.FC = () => {
 						</div>
 					)}
 					{/* Actions */}
-					{config.actions && (
+					{actionsWithHandlers && (
 						<div className="mb-6">
-							<AccountActions actions={config.actions} />
+							<AccountActions actions={actionsWithHandlers} />
 						</div>
 					)}
 					{config.moveFundsButton &&
@@ -360,20 +456,33 @@ const AccountDetail: React.FC = () => {
 										</div>
 										<div className="flex-1 min-w-0">
 											<div className="text-xl font-normal text-foreground">
-												{getTransactionLabel(tr.type)}
+												{getTransactionLabel(tr.type, tr.fromCurrency, tr.toCurrency)}
 											</div>
 											<div className="text-[#8E8E93] text-base">
 												{formatDate(tr.date)}
 											</div>
 										</div>
-										<div
-											className={`text-xl text-right font-normal ${
-												tr.amount > 0 ? "text-[#34C759]" : "text-foreground"
-											}`}
-										>
-											{tr.amount > 0 ? "+" : "-"}£
-											{Math.abs(tr.amount).toFixed(2)}
-										</div>
+										{tr.type === 'exchange' && tr.fromCurrency && tr.toCurrency ? (
+											<div className="text-right">
+												<div className="text-foreground text-lg font-normal">
+													- {CURRENCY_INFO[tr.fromCurrency]?.symbol}{' '}
+													{(tr.fromAmount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+												</div>
+												<div className="text-[#34C759] text-sm font-normal">
+													+ {tr.toCurrency}{' '}
+													{(tr.toAmount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+												</div>
+											</div>
+										) : (
+											<div
+												className={`text-xl text-right font-normal ${
+													tr.amount > 0 ? "text-[#34C759]" : "text-foreground"
+												}`}
+											>
+												{tr.amount > 0 ? "+" : "-"}£
+												{Math.abs(tr.amount).toFixed(2)}
+											</div>
+										)}
 									</div>
 								))}
 							</div>

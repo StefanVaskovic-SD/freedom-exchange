@@ -8,23 +8,70 @@ export interface Account {
   icon: React.ReactNode;
   balance: number;
   color: string;
+  currencyBalances?: Record<string, number>;
 }
 
 export interface Transaction {
   id: string;
-  type: "withdrawal" | "topup" | "transfer";
+  type: "withdrawal" | "topup" | "transfer" | "exchange";
   account: AccountType;
   amount: number;
   date: Date;
   recipient?: string;
   status: 'completed' | 'pending' | 'failed';
+  fromCurrency?: string;
+  toCurrency?: string;
+  fromAmount?: number;
+  toAmount?: number;
 }
+
+// Exchange rates: how much of target currency per 1 GBP
+export const EXCHANGE_RATES: Record<string, number> = {
+  GBP: 1,
+  USD: 1.27,
+  EUR: 1.17,
+  AED: 5.01,
+  CAD: 1.72,
+  AUD: 1.95,
+  JPY: 190.50,
+};
+
+export const CURRENCY_INFO: Record<string, { code: string; symbol: string; flag: string; name: string }> = {
+  GBP: { code: 'GBP', symbol: '£', flag: '🇬🇧', name: 'British Pound' },
+  USD: { code: 'USD', symbol: '$', flag: '🇺🇸', name: 'US Dollar' },
+  EUR: { code: 'EUR', symbol: '€', flag: '🇪🇺', name: 'Euro' },
+  AED: { code: 'AED', symbol: 'Dh', flag: '🇦🇪', name: 'United Arab Emirates Dirham' },
+  CAD: { code: 'CAD', symbol: '$', flag: '🇨🇦', name: 'Canadian Dollar' },
+  AUD: { code: 'AUD', symbol: '$', flag: '🇦🇺', name: 'Australian Dollar' },
+  JPY: { code: 'JPY', symbol: '¥', flag: '🇯🇵', name: 'Japanese Yen' },
+};
+
+export const WALLET_CURRENCIES = ['GBP', 'EUR', 'USD'] as const;
+
+export function convertCurrency(fromCurrency: string, toCurrency: string, amount: number): number {
+  if (fromCurrency === toCurrency) return amount;
+  // Convert to GBP first, then to target
+  const amountInGBP = amount / EXCHANGE_RATES[fromCurrency];
+  return amountInGBP * EXCHANGE_RATES[toCurrency];
+}
+
+export function getExchangeRate(fromCurrency: string, toCurrency: string): number {
+  // Returns how much 1 unit of toCurrency costs in fromCurrency
+  return EXCHANGE_RATES[fromCurrency] / EXCHANGE_RATES[toCurrency];
+}
+
+const DEFAULT_CURRENCY_BALANCES: Record<string, number> = {
+  GBP: 950.0,
+  EUR: 0,
+  USD: 0,
+};
 
 interface AccountContextType {
   accounts: Record<AccountType, Account>;
   transactions: Transaction[];
   updateBalance: (accountId: AccountType, newBalance: number) => void;
   transferFunds: (from: AccountType, to: AccountType, amount: number) => void;
+  exchangeFunds: (fromCurrency: string, toCurrency: string, fromAmount: number, toAmount: number) => void;
   getAccount: (accountId: AccountType) => Account;
 }
 
@@ -65,6 +112,7 @@ const INITIAL_ACCOUNTS: Record<AccountType, Account> = {
     ),
     balance: 950.0,
     color: '#E4B33D',
+    currencyBalances: { ...DEFAULT_CURRENCY_BALANCES },
   },
 };
 
@@ -85,11 +133,16 @@ export const AccountProvider: React.FC<{ children: ReactNode }> = ({ children })
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
+        const storedCurrencyBalances = parsed.currencyBalances || DEFAULT_CURRENCY_BALANCES;
         return {
           ...INITIAL_ACCOUNTS,
           pension: { ...INITIAL_ACCOUNTS.pension, balance: parsed.pension || INITIAL_ACCOUNTS.pension.balance },
           savings: { ...INITIAL_ACCOUNTS.savings, balance: parsed.savings || INITIAL_ACCOUNTS.savings.balance },
-          currentAccount: { ...INITIAL_ACCOUNTS.currentAccount, balance: parsed.currentAccount || INITIAL_ACCOUNTS.currentAccount.balance }
+          currentAccount: {
+            ...INITIAL_ACCOUNTS.currentAccount,
+            balance: parsed.currentAccount || INITIAL_ACCOUNTS.currentAccount.balance,
+            currencyBalances: storedCurrencyBalances,
+          }
         };
       } catch (e) {
         return INITIAL_ACCOUNTS;
@@ -121,7 +174,8 @@ export const AccountProvider: React.FC<{ children: ReactNode }> = ({ children })
     const balances = {
       pension: accounts.pension.balance,
       savings: accounts.savings.balance,
-      currentAccount: accounts.currentAccount.balance
+      currentAccount: accounts.currentAccount.balance,
+      currencyBalances: accounts.currentAccount.currencyBalances,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(balances));
   }, [accounts]);
@@ -185,12 +239,56 @@ export const AccountProvider: React.FC<{ children: ReactNode }> = ({ children })
     });
   }, []);
 
+  const exchangeFunds = useCallback((fromCurrency: string, toCurrency: string, fromAmount: number, toAmount: number) => {
+    setAccounts(prev => {
+      const currentAccount = prev.currentAccount;
+      const newCurrencyBalances = { ...(currentAccount.currencyBalances || DEFAULT_CURRENCY_BALANCES) };
+      
+      // Deduct from source currency
+      newCurrencyBalances[fromCurrency] = (newCurrencyBalances[fromCurrency] || 0) - fromAmount;
+      
+      // Add to target currency
+      newCurrencyBalances[toCurrency] = (newCurrencyBalances[toCurrency] || 0) + toAmount;
+      
+      return {
+        ...prev,
+        currentAccount: {
+          ...currentAccount,
+          balance: newCurrencyBalances['GBP'] ?? currentAccount.balance,
+          currencyBalances: newCurrencyBalances,
+        }
+      };
+    });
+
+    // Create exchange transaction
+    setTransactions(prev => {
+      const timestamp = new Date();
+      const transactionId = `txn_${Date.now()}`;
+      
+      const exchangeTransaction: Transaction = {
+        id: `${transactionId}_exchange`,
+        type: "exchange",
+        account: "currentAccount",
+        amount: -fromAmount,
+        date: timestamp,
+        recipient: `${fromCurrency} → ${toCurrency}`,
+        status: "completed",
+        fromCurrency,
+        toCurrency,
+        fromAmount,
+        toAmount,
+      };
+
+      return [exchangeTransaction, ...prev];
+    });
+  }, []);
+
   const getAccount = (accountId: AccountType): Account => {
     return accounts[accountId];
   };
 
   return (
-    <AccountContext.Provider value={{ accounts, transactions, updateBalance, transferFunds, getAccount }}>
+    <AccountContext.Provider value={{ accounts, transactions, updateBalance, transferFunds, exchangeFunds, getAccount }}>
       {children}
     </AccountContext.Provider>
   );

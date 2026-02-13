@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAccounts, AccountType } from "@/contexts/AccountContext";
+import { useAccounts, AccountType, CURRENCY_INFO } from "@/contexts/AccountContext";
 import {
 	Settings,
 	Car,
@@ -365,12 +365,16 @@ function getTransactionIcon(type: string) {
 			return (
 				<ArrowRightLeft className="w-5 h-5 text-[#211E1E] dark:text-white" />
 			);
+		case "exchange":
+			return (
+				<ArrowRightLeft className="w-5 h-5 text-[#211E1E] dark:text-white" />
+			);
 		default:
 			return null;
 	}
 }
 
-function getTransactionLabel(type: string) {
+function getTransactionLabel(type: string, fromCurrency?: string, toCurrency?: string) {
 	switch (type) {
 		case "withdrawal":
 			return "Withdrawal";
@@ -378,6 +382,8 @@ function getTransactionLabel(type: string) {
 			return "Top up";
 		case "transfer":
 			return "Transfer";
+		case "exchange":
+			return `${fromCurrency || ''} ⇄ ${toCurrency || ''}`;
 		default:
 			return type;
 	}
@@ -695,22 +701,35 @@ const Budgeting: React.FC = () => {
 									</div>
 									<div className="flex-1 min-w-0">
 										<div className="text-foreground text-xl font-normal">
-											{getTransactionLabel(transaction.type)}
+											{getTransactionLabel(transaction.type, transaction.fromCurrency, transaction.toCurrency)}
 										</div>
 										<div className="text-[#8E8E93] text-base">
 											{formatDate(transaction.date)}
 										</div>
 									</div>
-									<div
-										className={`text-xl font-normal ${
-											transaction.amount >= 0
-												? "text-[#34C759]"
-												: "text-foreground"
-										}`}
-									>
-										{transaction.amount >= 0 ? "+ " : "- "}£{" "}
-										{Math.abs(transaction.amount).toFixed(2)}
-									</div>
+									{transaction.type === 'exchange' && transaction.fromCurrency && transaction.toCurrency ? (
+										<div className="text-right">
+											<div className="text-foreground text-lg font-normal">
+												- {CURRENCY_INFO[transaction.fromCurrency]?.symbol}{' '}
+												{(transaction.fromAmount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+											</div>
+											<div className="text-[#34C759] text-sm font-normal">
+												+ {transaction.toCurrency}{' '}
+												{(transaction.toAmount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+											</div>
+										</div>
+									) : (
+										<div
+											className={`text-xl font-normal ${
+												transaction.amount >= 0
+													? "text-[#34C759]"
+													: "text-foreground"
+											}`}
+										>
+											{transaction.amount >= 0 ? "+ " : "- "}£{" "}
+											{Math.abs(transaction.amount).toFixed(2)}
+										</div>
+									)}
 								</div>
 							))}
 						</div>

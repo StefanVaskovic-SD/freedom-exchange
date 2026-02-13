@@ -18,6 +18,10 @@ import AccountDetail from "./pages/AccountDetail";
 import Learn from "./pages/Learn";
 import LearnArticle from "./pages/LearnArticle";
 import Budgeting from "./pages/Budgeting";
+import ExchangeFunds from "./pages/ExchangeFunds";
+import ExchangeReview from "./pages/ExchangeReview";
+import ExchangePin from "./pages/ExchangePin";
+import ExchangeSuccess from "./pages/ExchangeSuccess";
 import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
@@ -47,6 +51,10 @@ const App = () => (
 							<Route path="/learn" element={<Learn />} />
 							<Route path="/learn/:id" element={<LearnArticle />} />
 							<Route path="/budgeting" element={<Budgeting />} />
+							<Route path="/exchange" element={<ExchangeFunds />} />
+							<Route path="/exchange-review" element={<ExchangeReview />} />
+							<Route path="/exchange-pin" element={<ExchangePin />} />
+							<Route path="/exchange-success" element={<ExchangeSuccess />} />
 							{/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
 							<Route path="*" element={<NotFound />} />
 						</Routes>
