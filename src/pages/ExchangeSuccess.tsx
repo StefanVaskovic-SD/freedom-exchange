@@ -34,7 +34,7 @@ export const ExchangeSuccess: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F3F3F3] dark:bg-black text-foreground max-w-[480px] mx-auto flex flex-col px-4">
+    <div className="min-h-screen bg-[#F3F3F3] dark:bg-black text-foreground max-w-[480px] mx-auto flex flex-col px-4 pb-8">
       {/* Centered Content */}
       <div className="flex-1 flex flex-col items-center justify-center">
         {/* Success Icon */}
@@ -47,24 +47,24 @@ export const ExchangeSuccess: React.FC = () => {
         </div>
 
         {/* Success Message */}
-        <h1 className="text-3xl font-normal text-foreground text-center mb-6">
+        <h1 className="text-3xl font-normal text-foreground text-center mb-4">
           Success!
         </h1>
 
-        <p className="text-base text-[#716860] text-center max-w-sm leading-relaxed mb-3">
+        <p className="text-sm text-[#716860] dark:text-[#FFFFFFB2] text-center max-w-[280px] leading-relaxed">
           You have successfully sold {formatFrom} for{' '}
           {formatTo}.
         </p>
+      </div>
 
-        {/* Back to Home Button */}
-        <div className="w-full mb-8">
-          <Button
-            onClick={handleBackToHome}
-            className="w-full h-14 bg-[#A488F5] hover:bg-[#9575e8] text-white font-normal text-xl rounded-lg"
-          >
-            Back to home
-          </Button>
-        </div>
+      {/* Preview Transaction Button - pinned to bottom */}
+      <div className="w-full">
+        <Button
+          onClick={handleBackToHome}
+          className="w-full h-14 bg-[#A488F5] hover:bg-[#9575e8] text-black font-normal text-xl rounded-lg"
+        >
+          Preview transaction
+        </Button>
       </div>
     </div>
   );

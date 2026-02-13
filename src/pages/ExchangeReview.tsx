@@ -56,40 +56,41 @@ export const ExchangeReview: React.FC = () => {
 
         {/* Amount Display */}
         <div className="mb-6">
-          <p className="text-[#716860] text-base mb-1">From {formatFrom}</p>
-          <p className="text-foreground text-4xl font-normal mb-1">
+          <p className="text-[#716860] dark:text-[#FFFFFFB2] text-base mb-1">From {formatFrom}</p>
+          <p className="text-[#716860] dark:text-[#FFFFFFB2] text-lg mb-1">To</p>
+          <p className="text-foreground text-[40px] font-normal leading-tight">
             {formatTo}
           </p>
         </div>
 
-        <div className="w-full h-px mb-6" style={{ background: 'rgba(33, 30, 30, 0.15)' }} />
+        <div className="w-full h-px mb-6" style={{ background: 'rgba(255, 255, 255, 0.1)' }} />
 
         {/* Details */}
-        <div className="space-y-4 mb-8">
+        <div className="space-y-5 mb-8">
           <div className="flex items-center justify-between">
-            <span className="text-[#716860] text-base">Amount</span>
-            <span className="text-foreground text-base font-normal">{formatFrom}</span>
+            <span className="text-[#716860] dark:text-[#FFFFFFB2] text-base">Amount</span>
+            <span className="text-foreground text-lg font-normal">{formatFrom}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-[#716860] text-base">Price</span>
-            <span className="text-[#A488F5] text-base font-normal">
+            <span className="text-[#716860] dark:text-[#FFFFFFB2] text-base">Price</span>
+            <span className="text-[#A488F5] text-lg font-normal">
               1 {toCurrency} = {exchangeRate.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {fromCurrency}
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-[#716860] text-base">Exchanged</span>
-            <span className="text-foreground text-base font-normal">{formatTo}</span>
+            <span className="text-[#716860] dark:text-[#FFFFFFB2] text-base">Exchanged</span>
+            <span className="text-foreground text-lg font-normal">{formatTo}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-[#716860] text-base">Fees</span>
-            <span className="text-foreground text-base font-normal">No fees</span>
+            <span className="text-[#716860] dark:text-[#FFFFFFB2] text-base">Fees</span>
+            <span className="text-foreground text-lg font-normal">No fees</span>
           </div>
 
-          <div className="w-full h-px" style={{ background: 'rgba(33, 30, 30, 0.15)' }} />
+          <div className="w-full h-px" style={{ background: 'rgba(255, 255, 255, 0.1)' }} />
 
           <div className="flex items-center justify-between">
-            <span className="text-[#716860] text-base">Estimated total</span>
-            <span className="text-foreground text-base font-normal">{formatTo}</span>
+            <span className="text-[#716860] dark:text-[#FFFFFFB2] text-base">Estimated total</span>
+            <span className="text-foreground text-lg font-bold">{formatTo}</span>
           </div>
         </div>
 
@@ -97,7 +98,7 @@ export const ExchangeReview: React.FC = () => {
         <div className="mt-auto">
           <Button
             onClick={handleExchange}
-            className="w-full h-14 bg-[#A488F5] hover:bg-[#9575e8] text-white font-normal text-xl rounded-lg"
+            className="w-full h-14 bg-[#A488F5] hover:bg-[#9575e8] text-black font-normal text-xl rounded-lg"
           >
             Exchange
           </Button>
