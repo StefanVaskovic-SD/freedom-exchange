@@ -115,9 +115,9 @@ export const ExchangeFunds: React.FC = () => {
         </header>
 
         {/* Exchange Cards */}
-        <div className="bg-white dark:bg-[#211E1E] rounded-lg p-4">
-          {/* FROM Section */}
-          <div className="mb-2">
+        <div className="">
+          {/* FROM Card */}
+          <div className="bg-white dark:bg-[#211E1E] rounded-lg p-4">
             <div className="flex items-center justify-between mb-1">
               <span className="text-[#716860] text-base">From</span>
               <div className="flex items-center gap-2">
@@ -161,16 +161,16 @@ export const ExchangeFunds: React.FC = () => {
           </div>
 
           {/* Swap Indicator */}
-          <div className="flex justify-center -my-2 relative z-10">
-            <div className="w-10 h-10 bg-white dark:bg-[#2C2C2E] rounded-full flex items-center justify-center border-4 border-[#F3F3F3] dark:border-black">
+          <div className="flex justify-center -my-5 relative z-10">
+            <div className="w-12 h-12 bg-white dark:bg-[#211E1E] rounded-full flex items-center justify-center border-4 border-[#F3F3F3] dark:border-black">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
                 <path d="M6.74998 3.75C6.74998 3.55109 6.829 3.36032 6.96965 3.21967C7.1103 3.07902 7.30107 3 7.49998 3H16.5C16.6989 3 16.8897 3.07902 17.0303 3.21967C17.171 3.36032 17.25 3.55109 17.25 3.75C17.25 3.94891 17.171 4.13968 17.0303 4.28033C16.8897 4.42098 16.6989 4.5 16.5 4.5H7.49998C7.30107 4.5 7.1103 4.42098 6.96965 4.28033C6.829 4.13968 6.74998 3.94891 6.74998 3.75ZM21.6928 12.4631C21.6361 12.3261 21.54 12.2089 21.4166 12.1265C21.2933 12.044 21.1483 12 21 12H17.25V6.75C17.25 6.55109 17.171 6.36032 17.0303 6.21967C16.8897 6.07902 16.6989 6 16.5 6H7.49998C7.30107 6 7.1103 6.07902 6.96965 6.21967C6.829 6.36032 6.74998 6.55109 6.74998 6.75V12H2.99998C2.85156 11.9999 2.70644 12.0438 2.58299 12.1262C2.45955 12.2086 2.36333 12.3258 2.30651 12.4629C2.2497 12.6 2.23485 12.7509 2.26383 12.8965C2.29282 13.042 2.36435 13.1757 2.46936 13.2806L11.4694 22.2806C11.539 22.3504 11.6217 22.4057 11.7128 22.4434C11.8038 22.4812 11.9014 22.5006 12 22.5006C12.0985 22.5006 12.1961 22.4812 12.2872 22.4434C12.3782 22.4057 12.461 22.3504 12.5306 22.2806L21.5306 13.2806C21.6355 13.1757 21.7068 13.042 21.7357 12.8965C21.7646 12.751 21.7496 12.6002 21.6928 12.4631Z" fill="#716860"/>
               </svg>
             </div>
           </div>
 
-          {/* TO Section */}
-          <div className="mt-2">
+          {/* TO Card */}
+          <div className="bg-white dark:bg-[#211E1E] rounded-lg p-4">
             <div className="flex items-center justify-between mb-1">
               <span className="text-[#716860] text-base">To</span>
               <Drawer open={toCurrencyDrawerOpen} onOpenChange={setToCurrencyDrawerOpen}>
