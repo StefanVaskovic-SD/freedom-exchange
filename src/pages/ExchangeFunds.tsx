@@ -92,6 +92,9 @@ export const ExchangeFunds: React.FC = () => {
 
   const formatCurrencyAmount = (value: number, currCode: string) => {
     const info = CURRENCY_INFO[currCode];
+    if (currCode === 'AED') {
+      return value.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
     if (currCode === 'JPY') {
       return `${info.symbol}${Math.round(value).toLocaleString('en-GB')}`;
     }
