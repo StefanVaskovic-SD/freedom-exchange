@@ -304,7 +304,7 @@ const AccountDetail: React.FC = () => {
 		<div className="min-h-screen bg-[#F3F3F3] dark:bg-black text-foreground max-w-[480px] mx-auto flex flex-col pb-24">
 			<div className="px-4 py-6 flex flex-col flex-1">
 				<button
-					className="mb-4 w-12 h-12 bg-[#211E1E] rounded-full flex items-center justify-center text-white"
+					className="mb-4 w-12 h-12 bg-white dark:bg-[#211E1E] rounded-full flex items-center justify-center text-black dark:text-white"
 					onClick={() => navigate("/")}
 				>
 					<ArrowLeft className="w-6 h-6" />
@@ -312,7 +312,7 @@ const AccountDetail: React.FC = () => {
 				<div>
 					<div className="text-[28px] mb-2 font-normal">{config.display}</div>
 					{accountId === 'currentAccount' && (
-						<p className="text-[#FFFFFFB2] text-base mb-4">Funds available to spend</p>
+						<p className="opacity-70 text-base mb-4">Funds available to spend</p>
 					)}
 
 					{/* Currency Tabs - only for currentAccount */}
@@ -326,10 +326,10 @@ const AccountDetail: React.FC = () => {
 										<button
 											key={code}
 											onClick={() => setSelectedCurrency(code)}
-											className={`flex items-center gap-1.5 py-2 rounded-[12px] text-sm font-normal transition-colors border bg-[#211E1E] text-white ${
+											className={`flex items-center gap-1.5 px-[16px] py-[6px] rounded-[12px] text-sm font-normal transition-colors border bg-[#211E1E] text-white ${
 												isActive
-													? 'border-white px-5'
-													: 'border-[#211E1E] px-4'
+													? 'border-white'
+													: 'border-[#211E1E]'
 											}`}
 										>
 											<img src={`/${code.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={code} />

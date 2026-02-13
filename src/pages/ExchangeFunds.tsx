@@ -4,13 +4,6 @@ import { ArrowLeft, Search, Check } from 'lucide-react';
 import { useAccounts, CURRENCY_INFO, WALLET_CURRENCIES, convertCurrency, getExchangeRate } from '@/contexts/AccountContext';
 import { Button } from '@/components/ui/button';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
   Drawer,
   DrawerContent,
   DrawerHeader,
@@ -26,6 +19,7 @@ export const ExchangeFunds: React.FC = () => {
   const [fromCurrency, setFromCurrency] = useState<string>('GBP');
   const [toCurrency, setToCurrency] = useState<string>('AED');
   const [amount, setAmount] = useState('');
+  const [fromCurrencyDrawerOpen, setFromCurrencyDrawerOpen] = useState(false);
   const [toCurrencyDrawerOpen, setToCurrencyDrawerOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -85,6 +79,11 @@ export const ExchangeFunds: React.FC = () => {
     }
   };
 
+  const handleFromCurrencySelect = (code: string) => {
+    handleFromCurrencyChange(code);
+    setFromCurrencyDrawerOpen(false);
+  };
+
   const handleToCurrencySelect = (code: string) => {
     setToCurrency(code);
     setToCurrencyDrawerOpen(false);
@@ -106,7 +105,7 @@ export const ExchangeFunds: React.FC = () => {
         <header className="flex items-center mb-8">
           <button
             onClick={() => navigate(-1)}
-            className="w-12 h-12 rounded-full bg-[#211E1E] flex items-center justify-center text-white"
+            className="w-12 h-12 rounded-full bg-white dark:bg-[#211E1E] flex items-center justify-center text-black dark:text-white"
             aria-label="Go back"
           >
             <ArrowLeft className="w-6 h-6" />
@@ -120,28 +119,43 @@ export const ExchangeFunds: React.FC = () => {
           <div className="bg-white dark:bg-[#211E1E] rounded-lg p-4">
             <div className="flex items-center justify-between mb-1">
               <span className="text-[#716860] text-base">From</span>
-              <div className="flex items-center gap-2">
-                <Select value={fromCurrency} onValueChange={handleFromCurrencyChange}>
-                  <SelectTrigger className="w-auto bg-transparent border-none shadow-none h-auto p-0 text-foreground gap-1">
-                    <div className="flex items-center gap-1">
-                      <span className="text-lg">{CURRENCY_INFO[fromCurrency].flag}</span>
-                      <SelectValue>
-                        {fromCurrency} ({CURRENCY_INFO[fromCurrency].symbol})
-                      </SelectValue>
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent className="bg-white dark:bg-[#211E1E] border-border text-foreground">
-                    {WALLET_CURRENCIES.map(code => (
-                      <SelectItem key={code} value={code} className="cursor-pointer">
-                        <div className="flex items-center gap-2">
-                          <span className="text-lg">{CURRENCY_INFO[code].flag}</span>
-                          <span>{code} ({CURRENCY_INFO[code].symbol})</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <Drawer open={fromCurrencyDrawerOpen} onOpenChange={setFromCurrencyDrawerOpen}>
+                <DrawerTrigger asChild>
+                  <button className="flex items-center gap-1 text-foreground">
+                    <span className="text-lg">{CURRENCY_INFO[fromCurrency].flag}</span>
+                    <span className="text-sm font-normal">{fromCurrency} ({CURRENCY_INFO[fromCurrency].symbol})</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </button>
+                </DrawerTrigger>
+                <DrawerContent className="bg-white dark:bg-[#1C1C1E] border-border max-w-[480px] mx-auto">
+                  <DrawerHeader>
+                    <DrawerTitle className="text-foreground text-xl font-normal">Select currency</DrawerTitle>
+                  </DrawerHeader>
+                  <div className="px-4 pb-8">
+                    {WALLET_CURRENCIES.map(code => {
+                      const info = CURRENCY_INFO[code];
+                      const isSelected = code === fromCurrency;
+                      return (
+                        <button
+                          key={code}
+                          onClick={() => handleFromCurrencySelect(code)}
+                          className={`w-full flex items-center justify-between py-4 px-2 rounded-lg transition-colors ${
+                            isSelected ? 'bg-[#F3F3F3] dark:bg-[#2C2C2E] border border-[#A488F5]' : 'hover:bg-[#F3F3F3] dark:hover:bg-[#2C2C2E]'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className="text-2xl">{info.flag}</span>
+                            <span className="text-foreground text-base">
+                              {info.code} ({info.symbol})  {info.name}
+                            </span>
+                          </div>
+                          {isSelected && <Check className="w-5 h-5 text-[#A488F5]" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </DrawerContent>
+              </Drawer>
             </div>
             <div className="flex items-center justify-between">
               <input

@@ -111,7 +111,7 @@ export const ExchangePin: React.FC = () => {
         <header className="flex items-center mb-8">
           <button
             onClick={handleBack}
-            className="w-12 h-12 rounded-full bg-[#211E1E] flex items-center justify-center text-white"
+            className="w-12 h-12 rounded-full bg-white dark:bg-[#211E1E] flex items-center justify-center text-black dark:text-white"
             aria-label="Go back"
           >
             <ArrowLeft className="w-6 h-6" />
