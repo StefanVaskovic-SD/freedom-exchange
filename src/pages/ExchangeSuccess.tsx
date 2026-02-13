@@ -51,7 +51,7 @@ export const ExchangeSuccess: React.FC = () => {
           Success!
         </h1>
 
-        <p className="text-sm text-[#716860] dark:text-[#FFFFFFB2] text-center max-w-[280px] leading-relaxed">
+        <p className="text-xl text-[#716860] dark:text-[#FFFFFFB2] text-center max-w-[280px] leading-relaxed">
           You have successfully sold {formatFrom} for{' '}
           {formatTo}.
         </p>

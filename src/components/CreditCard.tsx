@@ -88,33 +88,34 @@ export const CreditCard: React.FC<CreditCardProps> = ({
 				</div>
 			</div>
 
-			{/* Cardholder name */}
-			<div className="relative z-10">
-				<div className="text-white text-xl font-normal mb-4">
-					{cardholderName}
-				</div>
-
-				{/* Valid and CVV */}
-				<div className="flex gap-8 mb-8">
-					<div>
-						<div className="text-white text-xs opacity-80 mb-1">Valid</div>
-						<div className="text-white text-base font-normal">{validUntil}</div>
-					</div>
-					<div>
-						<div className="text-white text-xs opacity-80 mb-1">CVV</div>
-						<div className="text-white text-base font-normal">{cvv}</div>
-					</div>
-				</div>
+		{/* Card details */}
+		<div className="relative z-10">
+			<div className="text-white text-xl font-normal mb-2">
+				{cardholderName}
 			</div>
 
-			{/* Bottom section */}
-			<div className="flex justify-between items-end relative z-10">
-				{/* Card number */}
-				<div className="text-white text-xl font-mono tracking-wider">
-					•••• {cardNumber}
-				</div>
+			{/* Card number */}
+			<div className="mb-4">
+				<span className="text-white text-xl font-mono tracking-wider">•••• </span>
+				<span className="text-[#E4B33D] text-xl font-mono tracking-wider">{cardNumber}</span>
+			</div>
 
-				{/* Logos */}
+			{/* Valid and CVV */}
+			<div className="flex gap-8 mb-4">
+				<div>
+					<div className="text-white text-xs opacity-80 mb-1">Valid</div>
+					<div className="text-white text-base font-normal">{validUntil}</div>
+				</div>
+				<div>
+					<div className="text-white text-xs opacity-80 mb-1">CVV</div>
+					<div className="text-white text-base font-normal">{cvv}</div>
+				</div>
+			</div>
+		</div>
+
+		{/* Bottom section */}
+		<div className="flex justify-between items-end relative z-10">
+			{/* Logos */}
 				<div className="flex items-center gap-3">
 					{/* Freedom text */}
 					<svg xmlns="http://www.w3.org/2000/svg" width="15" height="20" viewBox="0 0 15 20" fill="none">

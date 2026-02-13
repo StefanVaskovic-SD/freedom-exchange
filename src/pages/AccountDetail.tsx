@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useAccounts, AccountType, CURRENCY_INFO, WALLET_CURRENCIES } from "@/contexts/AccountContext";
-import { ArrowLeft, ArrowDown, ArrowUp, ArrowRightLeft, Copy } from "lucide-react";
+import { ArrowLeft, ArrowDown, ArrowUp, ArrowRightLeft } from "lucide-react";
+import { BottomNavigation } from "@/components/BottomNavigation";
 import { CreditCard } from "@/components/CreditCard";
 import { AccountActions } from "@/components/AccountActions";
 
@@ -300,10 +301,10 @@ const AccountDetail: React.FC = () => {
 	};
 
 	return (
-		<div className="min-h-screen bg-[#F3F3F3] dark:bg-black text-foreground max-w-[480px] mx-auto flex flex-col">
+		<div className="min-h-screen bg-[#F3F3F3] dark:bg-black text-foreground max-w-[480px] mx-auto flex flex-col pb-24">
 			<div className="px-4 py-6 flex flex-col flex-1">
 				<button
-					className="mb-4 w-12 h-12 bg-white rounded-full flex items-center justify-center text-black"
+					className="mb-4 w-12 h-12 bg-[#211E1E] rounded-full flex items-center justify-center text-white"
 					onClick={() => navigate("/")}
 				>
 					<ArrowLeft className="w-6 h-6" />
@@ -325,44 +326,49 @@ const AccountDetail: React.FC = () => {
 										<button
 											key={code}
 											onClick={() => setSelectedCurrency(code)}
-											className={`px-4 py-2 rounded-full text-sm font-normal transition-colors border ${
+											className={`flex items-center gap-1.5 py-2 rounded-full text-sm font-normal transition-colors border ${
 												isActive
-													? 'bg-[#211E1E] text-white border-[#211E1E] dark:bg-white dark:text-black dark:border-white'
-													: 'bg-transparent text-foreground border-[#716860]/30'
+													? 'border-white px-5'
+													: 'border-[#716860]/30 px-4'
 											}`}
 										>
+											<img src={`/${code.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={code} />
 											{code} ({info.symbol})
 										</button>
 									);
 								})}
 							</div>
 
-							{/* Currency Balance Display */}
-							<div className="flex items-center gap-3 mb-2">
-								<span className="text-2xl">{selectedCurrencyInfo?.flag}</span>
-								<span className="text-foreground text-lg">{selectedCurrency}</span>
-								<span className="ml-auto">
-									{(() => {
-										const { symbol, wholePart, decimalPart } = formatCurrencyBalance(selectedCurrencyBalance, selectedCurrency);
-										return (
-											<span className="text-foreground">
-												<span className="text-[28px] font-normal">{symbol}{wholePart}</span>
-												<span className="text-[18px]">.{decimalPart}</span>
-											</span>
-										);
-									})()}
-								</span>
-							</div>
+							{/* Currency Balance Card */}
+							<div className="bg-white dark:bg-[#211E1E] rounded-lg px-4 py-5 mb-4 flex flex-col justify-center h-[160px]">
+								<div className="flex items-center gap-3 mb-3">
+									<img src={`/${selectedCurrency.toLowerCase()}.png`} className="w-10 h-10 rounded-full object-cover" alt={selectedCurrency} />
+									<span className="text-foreground text-lg font-normal">{selectedCurrency}</span>
+									<span className="ml-auto">
+										{(() => {
+											const { symbol, wholePart, decimalPart } = formatCurrencyBalance(selectedCurrencyBalance, selectedCurrency);
+											return (
+												<span className="text-foreground">
+													<span className="text-[28px] font-normal">{symbol}{wholePart}</span>
+													<span className="text-[18px]">.{decimalPart}</span>
+												</span>
+											);
+										})()}
+									</span>
+								</div>
 
-							{/* IBAN */}
-							<div className="flex items-center gap-2 mb-4">
-								<span className="text-[#716860] text-sm">5728-4801446999-22</span>
-								<button 
-									onClick={() => navigator.clipboard?.writeText('5728480144699922')}
-									className="text-[#716860] hover:text-foreground transition-colors"
-								>
-									<Copy className="w-4 h-4" />
-								</button>
+								{/* IBAN */}
+								<div className="flex items-center gap-2">
+									<span className="text-[#716860] text-sm">5728-4801446999-22</span>
+									<button 
+										onClick={() => navigator.clipboard?.writeText('5728480144699922')}
+										className="hover:opacity-80 transition-opacity"
+									>
+										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+											<path d="M15 5.625V16.875C15 17.0408 14.9342 17.1997 14.8169 17.3169C14.6997 17.4342 14.5408 17.5 14.375 17.5H3.125C2.95924 17.5 2.80027 17.4342 2.68306 17.3169C2.56585 17.1997 2.5 17.0408 2.5 16.875V5.625C2.5 5.45924 2.56585 5.30027 2.68306 5.18306C2.80027 5.06585 2.95924 5 3.125 5H14.375C14.5408 5 14.6997 5.06585 14.8169 5.18306C14.9342 5.30027 15 5.45924 15 5.625ZM16.875 2.5H5.625C5.45924 2.5 5.30027 2.56585 5.18306 2.68306C5.06585 2.80027 5 2.95924 5 3.125C5 3.29076 5.06585 3.44973 5.18306 3.56694C5.30027 3.68415 5.45924 3.75 5.625 3.75H16.25V14.375C16.25 14.5408 16.3158 14.6997 16.4331 14.8169C16.5503 14.9342 16.7092 15 16.875 15C17.0408 15 17.1997 14.9342 17.3169 14.8169C17.4342 14.6997 17.5 14.5408 17.5 14.375V3.125C17.5 2.95924 17.4342 2.80027 17.3169 2.68306C17.1997 2.56585 17.0408 2.5 16.875 2.5Z" fill="white"/>
+										</svg>
+									</button>
+								</div>
 							</div>
 						</>
 					)}
@@ -401,6 +407,7 @@ const AccountDetail: React.FC = () => {
 					{actionsWithHandlers && (
 						<div className="mb-6">
 							<AccountActions actions={actionsWithHandlers} />
+							<div className="w-full h-px bg-[#E5E5EA] dark:bg-[#2C2C2E] mt-6" />
 						</div>
 					)}
 					{config.moveFundsButton &&
@@ -433,23 +440,10 @@ const AccountDetail: React.FC = () => {
 						})()}
 					{/* TRANSACTIONS */}
 					<div className="mt-6">
-						<div className="flex items-center justify-between mb-4">
-							<h2 className="text-lg font-normal text-foreground">
+						<div className="mb-4">
+							<h2 className="text-[28px] font-normal text-foreground">
 								Transactions
 							</h2>
-							<button
-								className="self-stretch flex items-center gap-1 text-lg text-[#A488F5] font-normal my-auto hover:text-[#9575e8] transition-colors"
-								onClick={() => navigate("/budgeting")}
-							>
-								<span className="text-[#A488F5] self-stretch my-auto text-base font-normal">
-									View budget
-								</span>
-								<img
-									src="https://api.builder.io/api/v1/image/assets/TEMP/c7bef006abc66b8f7fa6574d6a4853ed2994e5d2?placeholderIfAbsent=true"
-									className="aspect-[1] object-contain w-5 self-stretch shrink-0 my-auto"
-									alt=""
-								/>
-							</button>
 						</div>
 						{/* <div className="font-semibold mb-3">Transactions</div> */}
 						{filteredTransactions.length === 0 ? (
@@ -480,16 +474,14 @@ const AccountDetail: React.FC = () => {
 													- {CURRENCY_INFO[tr.fromCurrency]?.symbol}{' '}
 													{(tr.fromAmount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
 												</div>
-												<div className="text-[#34C759] text-sm font-normal">
+												<div className="text-foreground text-sm font-normal">
 													+ {tr.toCurrency}{' '}
 													{(tr.toAmount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
 												</div>
 											</div>
 										) : (
 											<div
-												className={`text-xl text-right font-normal ${
-													tr.amount > 0 ? "text-[#34C759]" : "text-foreground"
-												}`}
+												className="text-xl text-right font-normal text-foreground"
 											>
 												{tr.amount > 0 ? "+" : "-"}£
 												{Math.abs(tr.amount).toFixed(2)}
@@ -502,6 +494,7 @@ const AccountDetail: React.FC = () => {
 					</div>
 				</div>
 			</div>
+			{accountId === 'currentAccount' && <BottomNavigation />}
 		</div>
 	);
 };
