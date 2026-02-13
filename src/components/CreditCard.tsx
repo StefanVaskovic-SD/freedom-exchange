@@ -19,7 +19,7 @@ export const CreditCard: React.FC<CreditCardProps> = ({
 	cardType,
 }) => {
 	return (
-		<div className="relative bg-[url('/card-background.webp')] bg-cover bg-center rounded-lg p-6 flex flex-col justify-between overflow-hidden">
+		<div className="relative bg-[url('/card-background.webp')] bg-cover bg-center rounded-[9px] p-6 flex flex-col justify-between overflow-hidden">
 			{/* Menu button - absolute top right */}
 			<div className="absolute top-6 right-6 z-20 w-10 h-10 rounded-full bg-black flex items-center justify-center">
 				<div className="flex flex-col gap-1">
@@ -36,20 +36,20 @@ export const CreditCard: React.FC<CreditCardProps> = ({
 				</div>
 
 				{/* Card number */}
-				<div className="mb-4">
+				<div className="mb-6">
 					<span className="text-white text-xl font-mono tracking-wider">•••• </span>
-					<span className="text-[#E4B33D] text-xl font-mono tracking-wider">{cardNumber}</span>
+					<span className="text-white text-xl font-mono tracking-wider">{cardNumber}</span>
 				</div>
 
 				{/* Valid and CVV */}
-				<div className="flex gap-8 mb-6">
+				<div className="flex gap-4 mb-6">
 					<div>
-						<div className="text-white text-xs opacity-80 mb-1">Valid</div>
-						<div className="text-white text-base font-normal">{validUntil}</div>
+						<div className="text-white text-base opacity-80 mb-1">Valid</div>
+						<div className="text-white text-lg font-normal">{validUntil}</div>
 					</div>
 					<div>
-						<div className="text-white text-xs opacity-80 mb-1">CVV</div>
-						<div className="text-white text-base font-normal">{cvv}</div>
+						<div className="text-white text-base opacity-80 mb-1">CVV</div>
+						<div className="text-white text-lg font-normal">{cvv}</div>
 					</div>
 				</div>
 			</div>

@@ -166,7 +166,7 @@ export const HomeDark: React.FC = () => {
 								type="current"
 								accountName="Current Account"
 								subtitle=""
-								balance={formatBalance(accounts.currentAccount.balance)}
+								balance={formatBalance(accounts.currentAccount.currencyBalances?.GBP ?? accounts.currentAccount.balance)}
 								onClick={() => navigate("/account/currentAccount")}
 							/>
 						</div>
