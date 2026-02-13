@@ -19,6 +19,11 @@ const mockArticles = [
     id: '4',
     title: 'Should I Really Touch My Pension? A Guide for the Under-55s',
     image: '/content-hub/man-smiling.webp'
+  },
+  {
+    id: '5',
+    title: 'Retirement Planning Tips for Beginners',
+    image: '/retirement-planning.png'
   }
 ];
 

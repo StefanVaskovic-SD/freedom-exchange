@@ -340,6 +340,116 @@ const articles = {
 			},
 		],
 	},
+	"5": {
+		id: "5",
+		title: "Retirement Planning Tips for Beginners",
+		heroImage: "/retirement-planning.png",
+		date: "18 Oct 2025",
+		readTime: "7 minute read",
+		content: [
+			{
+				type: "paragraph",
+				content:
+					"Retirement might feel like a lifetime away, but the earlier you start planning, the more comfortable your future will be. Whether you're in your twenties or just getting serious about finances in your forties, it's never too late — or too early — to start.",
+			},
+			{
+				type: "heading2",
+				content: "Why Start Now?",
+			},
+			{
+				type: "paragraph",
+				content:
+					"Every year you delay saving for retirement costs you more than you might think. Thanks to compound interest, even small contributions made early can snowball into significant sums over time. A 25-year-old contributing just £100 a month could accumulate over £150,000 by age 65, assuming average market returns.",
+			},
+			{
+				type: "paragraph",
+				content:
+					"On the other hand, waiting until 35 to start means you'd need to contribute nearly double each month to reach the same goal. Time truly is your greatest asset when it comes to retirement planning.",
+			},
+			{
+				type: "heading2",
+				content: "Step 1: Understand Your Pension",
+			},
+			{
+				type: "paragraph",
+				content:
+					"If you're employed, chances are you're already enrolled in a workplace pension. Take the time to understand what your employer contributes, what you contribute, and where that money is invested. Many people are surprised to learn they're already building a retirement pot without realising it.",
+			},
+			{
+				type: "list",
+				items: [
+					"Check your pension provider's online portal for statements",
+					"Review the fund options available to you",
+					"Ensure you're contributing enough to get the full employer match",
+					"Consider increasing your contribution by even 1% — you'll barely notice it in your pay cheque",
+				],
+			},
+			{
+				type: "heading2",
+				content: "Step 2: Set a Retirement Goal",
+			},
+			{
+				type: "paragraph",
+				content:
+					"How much do you actually need to retire comfortably? A common rule of thumb is that you'll need roughly two-thirds of your current salary each year in retirement. If you earn £40,000, that means you'd want around £26,500 per year. Factor in the State Pension (currently around £10,600 per year), and you'll need your private pension to cover the rest.",
+			},
+			{
+				type: "paragraph",
+				content:
+					"Use online pension calculators to get a personalised estimate. Knowing your target number makes the journey feel more achievable and gives you something concrete to work towards.",
+			},
+			{
+				type: "heading2",
+				content: "Step 3: Diversify Your Savings",
+			},
+			{
+				type: "paragraph",
+				content:
+					"Don't put all your eggs in one basket. While your workplace pension is the foundation, consider supplementing it with other savings vehicles:",
+			},
+			{
+				type: "list",
+				items: [
+					"ISAs (Individual Savings Accounts) for tax-free growth",
+					"Lifetime ISAs for an extra 25% government bonus (up to £1,000/year)",
+					"Property investment as a long-term wealth builder",
+					"Emergency fund (3-6 months of expenses) to avoid dipping into retirement savings",
+				],
+			},
+			{
+				type: "heading2",
+				content: "Step 4: Avoid Common Pitfalls",
+			},
+			{
+				type: "paragraph",
+				content:
+					"New investors often make mistakes that can set them back years. Here are the most common ones to watch out for:",
+			},
+			{
+				type: "list",
+				items: [
+					"Cashing out your pension when changing jobs instead of transferring it",
+					"Ignoring fees — even a 1% difference in fund charges can cost tens of thousands over a career",
+					"Being too conservative too early — young investors can afford more risk for higher potential returns",
+					"Not reviewing your plan annually to adjust for life changes",
+				],
+			},
+			{
+				type: "heading2",
+				content: "Step 5: Make It Automatic",
+			},
+			{
+				type: "paragraph",
+				content:
+					"The best retirement plan is one you don't have to think about daily. Set up automatic contributions so saving becomes effortless. Increase your contributions whenever you get a raise, and treat your retirement fund as a non-negotiable monthly expense — just like rent or utilities.",
+			},
+			{
+				type: "paragraph",
+				content:
+					"Remember, retirement planning isn't about depriving yourself today. It's about making small, smart decisions now that give you the freedom to live life on your own terms later. Your future self will thank you for every pound you set aside today.",
+			},
+		],
+	},
 };
 
 const LearnArticle: React.FC = () => {

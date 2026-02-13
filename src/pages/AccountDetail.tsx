@@ -318,7 +318,7 @@ const AccountDetail: React.FC = () => {
 					{/* Currency Tabs - only for currentAccount */}
 					{accountId === 'currentAccount' && (
 						<>
-							<div className="flex gap-2 mb-4">
+							<div className="flex gap-2 mb-4 w-full">
 								{WALLET_CURRENCIES.map(code => {
 									const info = CURRENCY_INFO[code];
 									const isActive = selectedCurrency === code;
@@ -326,7 +326,7 @@ const AccountDetail: React.FC = () => {
 										<button
 											key={code}
 											onClick={() => setSelectedCurrency(code)}
-											className={`flex items-center gap-1.5 px-[16px] py-[6px] rounded-[12px] text-sm font-normal transition-colors border bg-white dark:bg-[#211E1E] text-black dark:text-white ${
+											className={`flex-1 flex items-center justify-center gap-1.5 py-[6px] rounded-[12px] text-sm font-normal transition-colors border bg-white dark:bg-[#211E1E] text-black dark:text-white ${
 												isActive
 													? 'border-[#716860] dark:border-white'
 													: 'border-white dark:border-[#211E1E]'
