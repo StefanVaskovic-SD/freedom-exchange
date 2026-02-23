@@ -41,6 +41,7 @@ export const ExchangeFunds: React.FC = () => {
     return getExchangeRate(fromCurrency, toCurrency);
   }, [fromCurrency, toCurrency]);
 
+  const exceedsBalance = numAmount > 0 && numAmount > fromBalance;
   const isValidAmount = numAmount > 0 && numAmount <= fromBalance;
 
   const availableToCurrencies = ALL_CURRENCIES.filter(c => c !== fromCurrency);
@@ -121,7 +122,7 @@ export const ExchangeFunds: React.FC = () => {
         {/* Exchange Cards */}
         <div className="">
           {/* FROM Card */}
-          <div className="bg-white dark:bg-[#211E1E] rounded-lg p-4">
+          <div className={`bg-white dark:bg-[#211E1E] rounded-lg p-4 ${exceedsBalance ? 'ring-1 ring-red-500' : ''}`}>
             <div className="flex items-center justify-between mb-1">
               <span className="text-[#716860] text-base">From</span>
               <Drawer open={fromCurrencyDrawerOpen} onOpenChange={setFromCurrencyDrawerOpen}>
@@ -169,13 +170,19 @@ export const ExchangeFunds: React.FC = () => {
                 value={amount}
                 onChange={handleAmountChange}
                 placeholder="0.00"
-                className="text-3xl font-normal text-foreground bg-transparent border-none outline-none w-full"
+                className={`text-3xl font-normal bg-transparent border-none outline-none w-full ${exceedsBalance ? 'text-red-500' : 'text-foreground'}`}
                 style={{ caretColor: '#A488F5' }}
                 autoFocus
               />
-              <span className="text-[#716860] text-sm whitespace-nowrap ml-2">
-                Balance {formatCurrencyAmount(fromBalance, fromCurrency)}
-              </span>
+              {exceedsBalance ? (
+                <span className="text-red-500 text-sm whitespace-nowrap ml-2">
+                  Insufficient funds {formatCurrencyAmount(fromBalance, fromCurrency)}
+                </span>
+              ) : (
+                <span className="text-[#716860] text-sm whitespace-nowrap ml-2">
+                  Balance {formatCurrencyAmount(fromBalance, fromCurrency)}
+                </span>
+              )}
             </div>
           </div>
 
