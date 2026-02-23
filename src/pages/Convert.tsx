@@ -81,6 +81,7 @@ const Convert: React.FC = () => {
 	const [fromCurrency, setFromCurrency] = useState<string>(initialCurrency);
 	const [toCurrency, setToCurrency] = useState<string>('');
 	const [amount, setAmount] = useState('');
+	const [fromCurrencyDrawerOpen, setFromCurrencyDrawerOpen] = useState(false);
 	const [toCurrencyDrawerOpen, setToCurrencyDrawerOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState('');
 
@@ -138,6 +139,16 @@ const Convert: React.FC = () => {
 				}
 			});
 		}
+	};
+
+	const handleFromCurrencySelect = (code: string) => {
+		setSelectedCurrency(code);
+		setFromCurrency(code);
+		setAmount('');
+		if (toCurrency === code) {
+			setToCurrency('');
+		}
+		setFromCurrencyDrawerOpen(false);
 	};
 
 	const handleToCurrencySelect = (code: string) => {
@@ -239,11 +250,43 @@ const Convert: React.FC = () => {
 						<div className={`bg-white dark:bg-[#211E1E] rounded-lg p-4 ${hasNoFunds || exceedsBalance ? 'ring-1 ring-red-500' : ''}`}>
 							<div className="flex items-center justify-between mb-1">
 								<span className="text-[#716860] text-base">From</span>
-								<div className="flex items-center gap-1 text-foreground">
-									<img src={`/${fromCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={fromCurrency} />
-									<span className="text-sm font-normal">{fromCurrency} ({CURRENCY_INFO[fromCurrency].symbol})</span>
-									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-								</div>
+								<Drawer open={fromCurrencyDrawerOpen} onOpenChange={setFromCurrencyDrawerOpen}>
+									<DrawerTrigger asChild>
+										<button className="flex items-center gap-1 text-foreground">
+											<img src={`/${fromCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={fromCurrency} />
+											<span className="text-sm font-normal">{fromCurrency} ({CURRENCY_INFO[fromCurrency].symbol})</span>
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+										</button>
+									</DrawerTrigger>
+									<DrawerContent className="bg-white dark:bg-[#1C1C1E] border-border max-w-[480px] mx-auto">
+										<DrawerHeader>
+											<DrawerTitle className="text-foreground text-xl font-normal">Select currency</DrawerTitle>
+										</DrawerHeader>
+										<div className="px-4 pb-8 max-h-[400px] overflow-y-auto">
+											{WALLET_CURRENCIES.map(code => {
+												const info = CURRENCY_INFO[code];
+												const isSelected = code === fromCurrency;
+												return (
+													<button
+														key={code}
+														onClick={() => handleFromCurrencySelect(code)}
+														className={`w-full flex items-center justify-between py-4 px-2 rounded-lg transition-colors ${
+															isSelected ? 'bg-[#F3F3F3] dark:bg-[#2C2C2E] border border-[#A488F5]' : 'hover:bg-[#F3F3F3] dark:hover:bg-[#2C2C2E]'
+														}`}
+													>
+														<div className="flex items-center gap-3">
+															<img src={`/${code.toLowerCase()}.png`} className="w-8 h-8 rounded-full object-cover" alt={code} />
+															<span className="text-foreground text-base">
+																{info.code} ({info.symbol})  {info.name}
+															</span>
+														</div>
+														{isSelected && <Check className="w-5 h-5 text-[#A488F5]" />}
+													</button>
+												);
+											})}
+										</div>
+									</DrawerContent>
+								</Drawer>
 							</div>
 							<div className="flex items-center justify-between">
 								<input
