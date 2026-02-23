@@ -8,6 +8,7 @@ interface AccountCardProps {
 	subtitle: string;
 	balance: React.ReactNode;
 	onClick: () => void;
+	onMoveFunds?: () => void;
 }
 
 export const AccountCard: React.FC<AccountCardProps> = ({
@@ -16,6 +17,7 @@ export const AccountCard: React.FC<AccountCardProps> = ({
 	subtitle,
 	balance,
 	onClick,
+	onMoveFunds,
 }) => {
 	const getBackgroundColor = () => {
 		switch (type) {
@@ -106,6 +108,7 @@ export const AccountCard: React.FC<AccountCardProps> = ({
 						className="flex items-center gap-2 bg-black rounded-full px-4 py-2.5"
 						onClick={(e) => {
 							e.stopPropagation();
+							onMoveFunds?.();
 						}}
 					>
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
