@@ -246,7 +246,7 @@ const Convert: React.FC = () => {
 						{/* FROM Card */}
 						<div className={`bg-white dark:bg-[#211E1E] rounded-lg p-4 ${hasNoFunds || exceedsBalance ? 'ring-1 ring-red-500' : ''}`}>
 							<div className="flex items-center justify-between mb-1">
-								<span className="text-[#716860] text-base">From</span>
+								<span className="text-foreground/70 text-base">From</span>
 								<Drawer open={fromCurrencyDrawerOpen} onOpenChange={setFromCurrencyDrawerOpen}>
 									<DrawerTrigger asChild>
 										<button className="flex items-center gap-1 text-foreground">
@@ -305,7 +305,7 @@ const Convert: React.FC = () => {
 										Insufficient funds {formatCurrencyAmount(fromBalance, fromCurrency)}
 									</span>
 								) : (
-									<span className="text-[#716860] text-sm whitespace-nowrap ml-2">
+									<span className="text-foreground/70 text-sm whitespace-nowrap ml-2">
 										Balance {formatCurrencyAmount(fromBalance, fromCurrency)}
 									</span>
 								)}
@@ -324,7 +324,7 @@ const Convert: React.FC = () => {
 						{/* TO Card */}
 						<div className="bg-white dark:bg-[#211E1E] rounded-lg p-4">
 							<div className="flex items-center justify-between mb-1">
-								<span className="text-[#716860] text-base">To</span>
+								<span className="text-foreground/70 text-base">To</span>
 								<Drawer open={toCurrencyDrawerOpen} onOpenChange={setToCurrencyDrawerOpen}>
 									<DrawerTrigger asChild>
 										<button className="flex items-center gap-1 text-foreground">
@@ -385,7 +385,7 @@ const Convert: React.FC = () => {
 								<span className={`text-3xl font-normal ${numAmount > 0 && toCurrency ? 'text-foreground' : 'text-[#716860]'}`}>
 									{numAmount > 0 && toCurrency ? convertedAmount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
 								</span>
-								<span className="text-[#716860] text-sm whitespace-nowrap ml-2">
+								<span className="text-foreground/70 text-sm whitespace-nowrap ml-2">
 									Balance {toCurrency ? formatCurrencyAmount(toBalance, toCurrency) : '0.00'}
 								</span>
 							</div>
