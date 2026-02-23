@@ -18,7 +18,7 @@ export const ExchangeFunds: React.FC = () => {
   const navigate = useNavigate();
   const { accounts } = useAccounts();
   const [fromCurrency, setFromCurrency] = useState<string>('GBP');
-  const [toCurrency, setToCurrency] = useState<string>('AED');
+  const [toCurrency, setToCurrency] = useState<string>('');
   const [amount, setAmount] = useState('');
   const [fromCurrencyDrawerOpen, setFromCurrencyDrawerOpen] = useState(false);
   const [toCurrencyDrawerOpen, setToCurrencyDrawerOpen] = useState(false);
@@ -42,7 +42,7 @@ export const ExchangeFunds: React.FC = () => {
   }, [fromCurrency, toCurrency]);
 
   const exceedsBalance = numAmount > 0 && numAmount > fromBalance;
-  const isValidAmount = numAmount > 0 && numAmount <= fromBalance;
+  const isValidAmount = numAmount > 0 && numAmount <= fromBalance && toCurrency !== '';
 
   const availableToCurrencies = ALL_CURRENCIES.filter(c => c !== fromCurrency);
   
@@ -202,8 +202,14 @@ export const ExchangeFunds: React.FC = () => {
               <Drawer open={toCurrencyDrawerOpen} onOpenChange={setToCurrencyDrawerOpen}>
                 <DrawerTrigger asChild>
                   <button className="flex items-center gap-1 text-foreground">
-                    <img src={`/${toCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={toCurrency} />
-                    <span className="text-sm font-normal">{toCurrency} ({CURRENCY_INFO[toCurrency].symbol})</span>
+                    {toCurrency ? (
+                      <>
+                        <img src={`/${toCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={toCurrency} />
+                        <span className="text-sm font-normal">{toCurrency} ({CURRENCY_INFO[toCurrency].symbol})</span>
+                      </>
+                    ) : (
+                      <span className="text-sm font-normal text-[#716860]">Select currency</span>
+                    )}
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                   </button>
                 </DrawerTrigger>
@@ -250,11 +256,11 @@ export const ExchangeFunds: React.FC = () => {
               </Drawer>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-3xl font-normal text-foreground">
-                {numAmount > 0 ? convertedAmount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
+              <span className={`text-3xl font-normal ${numAmount > 0 && toCurrency ? 'text-foreground' : 'text-[#716860]'}`}>
+                {numAmount > 0 && toCurrency ? convertedAmount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
               </span>
               <span className="text-[#716860] text-sm whitespace-nowrap ml-2">
-                Balance {formatCurrencyAmount(toBalance, toCurrency)}
+                Balance {toCurrency ? formatCurrencyAmount(toBalance, toCurrency) : '0.00'}
               </span>
             </div>
           </div>
@@ -278,9 +284,13 @@ export const ExchangeFunds: React.FC = () => {
         {/* Exchange Rate */}
         <div className="mt-2">
           <p className="text-[#716860] text-sm">Exchange rate</p>
-          <p className="text-[#A488F5] text-base font-normal">
-            1 {toCurrency} = {exchangeRate.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {fromCurrency}
-          </p>
+          {toCurrency ? (
+            <p className="text-[#A488F5] text-base font-normal">
+              1 {toCurrency} = {exchangeRate.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {fromCurrency}
+            </p>
+          ) : (
+            <p className="text-[#716860] text-base font-normal">-- --</p>
+          )}
         </div>
       </div>
     </div>

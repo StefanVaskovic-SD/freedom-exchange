@@ -382,7 +382,7 @@ const Convert: React.FC = () => {
 								</Drawer>
 							</div>
 							<div className="flex items-center justify-between">
-								<span className="text-3xl font-normal text-foreground">
+								<span className={`text-3xl font-normal ${numAmount > 0 && toCurrency ? 'text-foreground' : 'text-[#716860]'}`}>
 									{numAmount > 0 && toCurrency ? convertedAmount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
 								</span>
 								<span className="text-[#716860] text-sm whitespace-nowrap ml-2">
