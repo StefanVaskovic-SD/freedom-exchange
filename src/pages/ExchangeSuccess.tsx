@@ -28,7 +28,7 @@ export const ExchangeSuccess: React.FC = () => {
     const walletCurrencies = WALLET_CURRENCIES as readonly string[];
     const selectedCurrency = walletCurrencies.includes(toCurrency) ? toCurrency : 'GBP';
     
-    navigate('/account/currentAccount', {
+    navigate('/convert', {
       state: { selectedCurrency },
     });
   };

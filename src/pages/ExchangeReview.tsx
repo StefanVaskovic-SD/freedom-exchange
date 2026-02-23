@@ -28,7 +28,7 @@ export const ExchangeReview: React.FC = () => {
   const formatTo = `${toAmount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${toCurrency}`;
 
   const handleBack = () => {
-    navigate('/account/currentAccount', { replace: true });
+    navigate('/convert', { replace: true });
   };
 
   const handleExchange = () => {

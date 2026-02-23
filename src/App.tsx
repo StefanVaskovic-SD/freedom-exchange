@@ -22,6 +22,7 @@ import ExchangeFunds from "./pages/ExchangeFunds";
 import ExchangeReview from "./pages/ExchangeReview";
 import ExchangePin from "./pages/ExchangePin";
 import ExchangeSuccess from "./pages/ExchangeSuccess";
+import Convert from "./pages/Convert";
 import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
@@ -51,6 +52,7 @@ const App = () => (
 							<Route path="/learn" element={<Learn />} />
 							<Route path="/learn/:id" element={<LearnArticle />} />
 							<Route path="/budgeting" element={<Budgeting />} />
+							<Route path="/convert" element={<Convert />} />
 							<Route path="/exchange" element={<ExchangeFunds />} />
 							<Route path="/exchange-review" element={<ExchangeReview />} />
 							<Route path="/exchange-pin" element={<ExchangePin />} />
