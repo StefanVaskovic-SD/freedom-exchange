@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAccounts, CURRENCY_INFO, WALLET_CURRENCIES, convertCurrency, getExchangeRate } from "@/contexts/AccountContext";
+import { useAccounts, CURRENCY_INFO, WALLET_CURRENCIES, convertCurrency, getExchangeRate, ConvertTransaction } from "@/contexts/AccountContext";
 import { ArrowLeft, ArrowDown, ArrowUp, ArrowRightLeft, Search, Check } from "lucide-react";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { Button } from "@/components/ui/button";
@@ -73,7 +73,7 @@ function ExchangeLabel({ fromCurrency, toCurrency }: { fromCurrency: string; toC
 const Convert: React.FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const { accounts, transactions } = useAccounts();
+	const { convertBalances, convertTransactions } = useAccounts();
 
 	const initialCurrency = (location.state as any)?.selectedCurrency || 'GBP';
 	const [selectedCurrency, setSelectedCurrency] = useState<string>(initialCurrency);
@@ -89,14 +89,12 @@ const Convert: React.FC = () => {
 		setAmount('');
 	}, [selectedCurrency]);
 
-	const currentAccount = accounts.currentAccount;
-	const currencyBalances = currentAccount.currencyBalances || { GBP: currentAccount.balance, EUR: 0, USD: 0 };
+	const currencyBalances = convertBalances;
 	const fromBalance = currencyBalances[fromCurrency] || 0;
 	const toBalance = currencyBalances[toCurrency] || 0;
 	const hasNoFunds = fromBalance <= 0;
 
-	const filteredTransactions = transactions
-		.filter((t) => t.account === 'currentAccount')
+	const filteredTransactions = [...convertTransactions]
 		.sort((a, b) => b.date.getTime() - a.date.getTime());
 
 	const numAmount = parseFloat(amount) || 0;
@@ -135,6 +133,7 @@ const Convert: React.FC = () => {
 					toCurrency,
 					fromAmount: numAmount,
 					toAmount: convertedAmount,
+					source: 'convert',
 				}
 			});
 		}

@@ -70,6 +70,18 @@ const DEFAULT_CURRENCY_BALANCES: Record<string, number> = {
   JPY: 0,
 };
 
+export interface ConvertTransaction {
+  id: string;
+  type: "exchange";
+  amount: number;
+  date: Date;
+  status: 'completed';
+  fromCurrency: string;
+  toCurrency: string;
+  fromAmount: number;
+  toAmount: number;
+}
+
 interface AccountContextType {
   accounts: Record<AccountType, Account>;
   transactions: Transaction[];
@@ -77,6 +89,9 @@ interface AccountContextType {
   transferFunds: (from: AccountType, to: AccountType, amount: number, currency?: string) => void;
   exchangeFunds: (fromCurrency: string, toCurrency: string, fromAmount: number, toAmount: number) => void;
   getAccount: (accountId: AccountType) => Account;
+  convertBalances: Record<string, number>;
+  convertTransactions: ConvertTransaction[];
+  exchangeConvertFunds: (fromCurrency: string, toCurrency: string, fromAmount: number, toAmount: number) => void;
 }
 
 const AccountContext = createContext<AccountContextType | undefined>(undefined);
@@ -122,6 +137,18 @@ const INITIAL_ACCOUNTS: Record<AccountType, Account> = {
 
 const STORAGE_KEY = 'account_balances';
 const TRANSACTIONS_KEY = 'account_transactions';
+const CONVERT_BALANCES_KEY = 'convert_balances';
+const CONVERT_TRANSACTIONS_KEY = 'convert_transactions';
+
+const DEFAULT_CONVERT_BALANCES: Record<string, number> = {
+  GBP: 1000.0,
+  EUR: 0,
+  USD: 0,
+  AED: 0,
+  CAD: 0,
+  AUD: 0,
+  JPY: 0,
+};
 
 // Initial sample transactions
 const INITIAL_TRANSACTIONS: Transaction[] = [
@@ -310,12 +337,63 @@ export const AccountProvider: React.FC<{ children: ReactNode }> = ({ children })
     });
   }, []);
 
+  // Convert wallet state
+  const [convertBalances, setConvertBalances] = useState<Record<string, number>>(() => {
+    const stored = localStorage.getItem(CONVERT_BALANCES_KEY);
+    if (stored) {
+      try { return JSON.parse(stored); } catch { return { ...DEFAULT_CONVERT_BALANCES }; }
+    }
+    return { ...DEFAULT_CONVERT_BALANCES };
+  });
+
+  const [convertTransactions, setConvertTransactions] = useState<ConvertTransaction[]>(() => {
+    const stored = localStorage.getItem(CONVERT_TRANSACTIONS_KEY);
+    if (stored) {
+      try {
+        return JSON.parse(stored).map((t: any) => ({ ...t, date: new Date(t.date) }));
+      } catch { return []; }
+    }
+    return [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem(CONVERT_BALANCES_KEY, JSON.stringify(convertBalances));
+  }, [convertBalances]);
+
+  useEffect(() => {
+    localStorage.setItem(CONVERT_TRANSACTIONS_KEY, JSON.stringify(convertTransactions));
+  }, [convertTransactions]);
+
+  const exchangeConvertFunds = useCallback((fromCurrency: string, toCurrency: string, fromAmount: number, toAmount: number) => {
+    setConvertBalances(prev => {
+      const updated = { ...prev };
+      updated[fromCurrency] = (updated[fromCurrency] || 0) - fromAmount;
+      updated[toCurrency] = (updated[toCurrency] || 0) + toAmount;
+      return updated;
+    });
+
+    setConvertTransactions(prev => {
+      const txn: ConvertTransaction = {
+        id: `cvt_${Date.now()}`,
+        type: "exchange",
+        amount: -fromAmount,
+        date: new Date(),
+        status: "completed",
+        fromCurrency,
+        toCurrency,
+        fromAmount,
+        toAmount,
+      };
+      return [txn, ...prev];
+    });
+  }, []);
+
   const getAccount = (accountId: AccountType): Account => {
     return accounts[accountId];
   };
 
   return (
-    <AccountContext.Provider value={{ accounts, transactions, updateBalance, transferFunds, exchangeFunds, getAccount }}>
+    <AccountContext.Provider value={{ accounts, transactions, updateBalance, transferFunds, exchangeFunds, getAccount, convertBalances, convertTransactions, exchangeConvertFunds }}>
       {children}
     </AccountContext.Provider>
   );

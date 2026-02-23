@@ -174,7 +174,11 @@ export const HomeDark: React.FC = () => {
 
 					<div className="mb-6">
 						<div className="mt-4">
-						<AccountActions actions={currentAccountActions} />
+						<AccountActions actions={currentAccountActions.map(action => 
+							action.label === 'Exchange' 
+								? { ...action, onClick: () => navigate('/exchange') } 
+								: action
+						)} />
 						</div>
 					</div>
 

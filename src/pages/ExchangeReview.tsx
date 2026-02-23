@@ -8,11 +8,12 @@ export const ExchangeReview: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { fromCurrency, toCurrency, fromAmount, toAmount } = location.state as {
+  const { fromCurrency, toCurrency, fromAmount, toAmount, source } = location.state as {
     fromCurrency: string;
     toCurrency: string;
     fromAmount: number;
     toAmount: number;
+    source?: string;
   };
 
   if (!fromCurrency || !toCurrency) {
@@ -28,12 +29,12 @@ export const ExchangeReview: React.FC = () => {
   const formatTo = `${toAmount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${toCurrency}`;
 
   const handleBack = () => {
-    navigate('/convert', { replace: true });
+    navigate(source === 'convert' ? '/convert' : '/exchange', { replace: true });
   };
 
   const handleExchange = () => {
     navigate('/exchange-pin', {
-      state: { fromCurrency, toCurrency, fromAmount, toAmount },
+      state: { fromCurrency, toCurrency, fromAmount, toAmount, source },
     });
   };
 

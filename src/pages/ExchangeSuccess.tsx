@@ -2,35 +2,35 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { CURRENCY_INFO, WALLET_CURRENCIES } from '@/contexts/AccountContext';
+import { CURRENCY_INFO, WALLET_CURRENCIES } from "@/contexts/AccountContext";
 
 export const ExchangeSuccess: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { fromCurrency, toCurrency, fromAmount, toAmount } = location.state as {
+  const { fromCurrency, toCurrency, fromAmount, toAmount, source } = location.state as {
     fromCurrency: string;
     toCurrency: string;
     fromAmount: number;
     toAmount: number;
+    source?: string;
   };
 
   const fromInfo = CURRENCY_INFO[fromCurrency];
-  const toInfo = CURRENCY_INFO[toCurrency];
 
   const formatFrom = `${fromInfo.symbol}${fromAmount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   const formatTo = `${toAmount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${toCurrency}`;
 
   const handleBackToHome = () => {
-    // Navigate to Current Account with the target currency tab selected
-    // If toCurrency is a wallet currency (GBP, EUR, USD), select that tab
-    // Otherwise, default to GBP
-    const walletCurrencies = WALLET_CURRENCIES as readonly string[];
-    const selectedCurrency = walletCurrencies.includes(toCurrency) ? toCurrency : 'GBP';
-    
-    navigate('/convert', {
-      state: { selectedCurrency },
-    });
+    if (source === 'convert') {
+      const walletCurrencies = WALLET_CURRENCIES as readonly string[];
+      const selectedCurrency = walletCurrencies.includes(toCurrency) ? toCurrency : 'GBP';
+      navigate('/convert', { state: { selectedCurrency } });
+    } else {
+      const accountCurrencies = ['GBP', 'EUR', 'USD'];
+      const selectedCurrency = accountCurrencies.includes(toCurrency) ? toCurrency : 'GBP';
+      navigate('/account/currentAccount', { state: { selectedCurrency } });
+    }
   };
 
   return (

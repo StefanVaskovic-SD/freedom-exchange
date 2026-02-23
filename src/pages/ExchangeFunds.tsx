@@ -66,6 +66,7 @@ export const ExchangeFunds: React.FC = () => {
           toCurrency,
           fromAmount: numAmount,
           toAmount: convertedAmount,
+          source: 'currentAccount',
         }
       });
     }
@@ -107,7 +108,7 @@ export const ExchangeFunds: React.FC = () => {
         {/* Header */}
         <header className="flex items-center mb-8">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/account/currentAccount')}
             className="w-12 h-12 rounded-full bg-white dark:bg-[#211E1E] flex items-center justify-center text-black dark:text-white"
             aria-label="Go back"
           >

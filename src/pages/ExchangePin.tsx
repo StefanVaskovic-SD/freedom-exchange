@@ -9,14 +9,15 @@ const CORRECT_PIN = '0000';
 export const ExchangePin: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { exchangeFunds } = useAccounts();
+  const { exchangeFunds, exchangeConvertFunds } = useAccounts();
   const { toast } = useToast();
 
-  const { fromCurrency, toCurrency, fromAmount, toAmount } = location.state as {
+  const { fromCurrency, toCurrency, fromAmount, toAmount, source } = location.state as {
     fromCurrency: string;
     toCurrency: string;
     fromAmount: number;
     toAmount: number;
+    source?: string;
   };
 
   const [pin, setPin] = useState<string[]>(['', '', '', '']);
@@ -38,13 +39,15 @@ export const ExchangePin: React.FC = () => {
         exchangeExecutedRef.current = true;
         setIsLoading(true);
 
-        // Execute the exchange
-        exchangeFunds(fromCurrency, toCurrency, fromAmount, toAmount);
+        if (source === 'convert') {
+          exchangeConvertFunds(fromCurrency, toCurrency, fromAmount, toAmount);
+        } else {
+          exchangeFunds(fromCurrency, toCurrency, fromAmount, toAmount);
+        }
 
-        // Show loading for 3 seconds, then navigate to success
         setTimeout(() => {
           navigate('/exchange-success', {
-            state: { fromCurrency, toCurrency, fromAmount, toAmount },
+            state: { fromCurrency, toCurrency, fromAmount, toAmount, source },
           });
         }, 3000);
       } else {
@@ -99,7 +102,7 @@ export const ExchangePin: React.FC = () => {
   const handleBack = () => {
     if (!isLoading) {
       navigate('/exchange-review', {
-        state: { fromCurrency, toCurrency, fromAmount, toAmount },
+        state: { fromCurrency, toCurrency, fromAmount, toAmount, source },
       });
     }
   };

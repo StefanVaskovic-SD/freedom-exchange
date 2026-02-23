@@ -167,7 +167,7 @@ const AccountDetail: React.FC = () => {
 
 	const actionsWithHandlers = config.actions?.map(action => {
 		if (action.label === 'Exchange') {
-			return { ...action, onClick: () => navigate('/convert') };
+			return { ...action, onClick: () => navigate('/exchange') };
 		}
 		return action;
 	});
