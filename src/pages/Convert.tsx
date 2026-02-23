@@ -292,7 +292,7 @@ const Convert: React.FC = () => {
 									value={amount}
 									onChange={handleAmountChange}
 									placeholder="0.00"
-									className={`text-3xl font-normal bg-transparent border-none outline-none w-full ${exceedsBalance ? 'text-red-500' : ''}`}
+									className={`text-3xl font-normal bg-transparent border-none outline-none w-full ${exceedsBalance ? 'text-red-500' : 'text-foreground'}`}
 									style={{ caretColor: '#A488F5' }}
 									disabled={hasNoFunds}
 								/>
@@ -334,7 +334,7 @@ const Convert: React.FC = () => {
 													<span className="text-sm font-normal">{toCurrency} ({CURRENCY_INFO[toCurrency].symbol})</span>
 												</>
 											) : (
-												<span className="text-sm font-normal text-[#716860]">Select currency</span>
+												<span className="text-sm font-normal">Select currency</span>
 											)}
 											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
 										</button>
