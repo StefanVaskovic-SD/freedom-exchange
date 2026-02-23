@@ -9,7 +9,6 @@ import {
 	DrawerContent,
 	DrawerHeader,
 	DrawerTitle,
-	DrawerTrigger,
 } from "@/components/ui/drawer";
 
 const ALL_CURRENCIES = Object.keys(CURRENCY_INFO);
@@ -81,7 +80,8 @@ const Convert: React.FC = () => {
 	const [fromCurrency, setFromCurrency] = useState<string>(initialCurrency);
 	const [toCurrency, setToCurrency] = useState<string>('');
 	const [amount, setAmount] = useState('');
-	const [activeDrawer, setActiveDrawer] = useState<'from' | 'to' | null>(null);
+	const [drawerOpen, setDrawerOpen] = useState(false);
+	const [drawerMode, setDrawerMode] = useState<'from' | 'to'>('from');
 	const [searchQuery, setSearchQuery] = useState('');
 
 	const handleTabChange = (code: string) => {
@@ -142,16 +142,33 @@ const Convert: React.FC = () => {
 		}
 	};
 
-	const handleFromCurrencySelect = (code: string) => {
-		handleTabChange(code);
-		setActiveDrawer(null);
+	const openFromDrawer = () => {
+		setDrawerMode('from');
+		setSearchQuery('');
+		setDrawerOpen(true);
 	};
 
-	const handleToCurrencySelect = (code: string) => {
-		setToCurrency(code);
-		setActiveDrawer(null);
+	const openToDrawer = () => {
+		setDrawerMode('to');
+		setSearchQuery('');
+		setDrawerOpen(true);
+	};
+
+	const handleCurrencySelect = (code: string) => {
+		if (drawerMode === 'from') {
+			handleTabChange(code);
+		} else {
+			setToCurrency(code);
+		}
+		setDrawerOpen(false);
 		setSearchQuery('');
 	};
+
+	const drawerCurrencies = drawerMode === 'from'
+		? WALLET_CURRENCIES.map(c => c as string)
+		: filteredToCurrencies;
+
+	const drawerSelected = drawerMode === 'from' ? fromCurrency : toCurrency;
 
 	const formatCurrencyAmount = (value: number, currCode: string) => {
 		const info = CURRENCY_INFO[currCode];
@@ -185,7 +202,7 @@ const Convert: React.FC = () => {
 					<div className="text-[28px] mb-2 font-normal">Multi currency wallet</div>
 					<p className="opacity-70 text-base mb-4">Funds available to spend</p>
 
-					{/* Currency Tabs - all 7 currencies, scrollable */}
+					{/* Currency Tabs */}
 					<div className="flex gap-2 mb-4 w-full overflow-x-auto no-scrollbar">
 						{WALLET_CURRENCIES.map(code => {
 							const info = CURRENCY_INFO[code];
@@ -246,43 +263,11 @@ const Convert: React.FC = () => {
 						<div className={`bg-white dark:bg-[#211E1E] rounded-lg p-4 ${hasNoFunds || exceedsBalance ? 'ring-1 ring-red-500' : ''}`}>
 							<div className="flex items-center justify-between mb-1">
 								<span className="text-foreground/70 text-base">From</span>
-								<Drawer open={activeDrawer === 'from'} onOpenChange={(open) => setActiveDrawer(open ? 'from' : null)}>
-									<DrawerTrigger asChild>
-										<button className="flex items-center gap-1">
-											<img src={`/${fromCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={fromCurrency} />
-											<span className="text-sm font-normal">{fromCurrency} ({CURRENCY_INFO[fromCurrency].symbol})</span>
-											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-										</button>
-									</DrawerTrigger>
-									<DrawerContent className="bg-white dark:bg-[#1C1C1E] border-border max-w-[480px] mx-auto">
-										<DrawerHeader>
-											<DrawerTitle className="text-foreground text-xl font-normal">Select currency</DrawerTitle>
-										</DrawerHeader>
-										<div className="px-4 pb-8 max-h-[400px] overflow-y-auto">
-											{WALLET_CURRENCIES.map(code => {
-												const info = CURRENCY_INFO[code];
-												const isSelected = code === fromCurrency;
-												return (
-													<button
-														key={code}
-														onClick={() => handleFromCurrencySelect(code)}
-														className={`w-full flex items-center justify-between py-4 px-2 rounded-lg transition-colors ${
-															isSelected ? 'bg-[#F3F3F3] dark:bg-[#2C2C2E] border border-[#A488F5]' : 'hover:bg-[#F3F3F3] dark:hover:bg-[#2C2C2E]'
-														}`}
-													>
-														<div className="flex items-center gap-3">
-															<img src={`/${code.toLowerCase()}.png`} className="w-8 h-8 rounded-full object-cover" alt={code} />
-															<span className="text-foreground text-base">
-																{info.code} ({info.symbol})  {info.name}
-															</span>
-														</div>
-														{isSelected && <Check className="w-5 h-5 text-[#A488F5]" />}
-													</button>
-												);
-											})}
-										</div>
-									</DrawerContent>
-								</Drawer>
+								<button className="flex items-center gap-1 text-foreground" onClick={openFromDrawer}>
+									<img src={`/${fromCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={fromCurrency} />
+									<span className="text-sm font-normal">{fromCurrency} ({CURRENCY_INFO[fromCurrency].symbol})</span>
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+								</button>
 							</div>
 							<div className="flex items-center justify-between">
 								<input
@@ -324,61 +309,17 @@ const Convert: React.FC = () => {
 						<div className="bg-white dark:bg-[#211E1E] rounded-lg p-4">
 							<div className="flex items-center justify-between mb-1">
 								<span className="text-foreground/70 text-base">To</span>
-								<Drawer open={activeDrawer === 'to'} onOpenChange={(open) => setActiveDrawer(open ? 'to' : null)}>
-									<DrawerTrigger asChild>
-										<button className="flex items-center gap-1">
-											{toCurrency ? (
-												<>
-													<img src={`/${toCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={toCurrency} />
-													<span className="text-sm font-normal">{toCurrency} ({CURRENCY_INFO[toCurrency].symbol})</span>
-												</>
-											) : (
-												<span className="text-sm font-normal">Select currency</span>
-											)}
-											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-										</button>
-									</DrawerTrigger>
-									<DrawerContent className="bg-white dark:bg-[#1C1C1E] border-border max-w-[480px] mx-auto">
-										<DrawerHeader>
-											<DrawerTitle className="text-foreground text-xl font-normal">Available currencies</DrawerTitle>
-										</DrawerHeader>
-										<div className="px-4 pb-2">
-											<div className="relative">
-												<Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#716860]" />
-												<input
-													type="text"
-													placeholder="Type a currency"
-													value={searchQuery}
-													onChange={e => setSearchQuery(e.target.value)}
-													className="w-full pl-10 pr-4 py-3 bg-[#F3F3F3] dark:bg-[#2C2C2E] rounded-lg text-foreground placeholder:text-[#716860] outline-none border-none"
-												/>
-											</div>
-										</div>
-										<div className="px-4 pb-8 max-h-[400px] overflow-y-auto">
-											{filteredToCurrencies.map(code => {
-												const info = CURRENCY_INFO[code];
-												const isSelected = code === toCurrency;
-												return (
-													<button
-														key={code}
-														onClick={() => handleToCurrencySelect(code)}
-														className={`w-full flex items-center justify-between py-4 px-2 rounded-lg transition-colors ${
-															isSelected ? 'bg-[#F3F3F3] dark:bg-[#2C2C2E] border border-[#A488F5]' : 'hover:bg-[#F3F3F3] dark:hover:bg-[#2C2C2E]'
-														}`}
-													>
-														<div className="flex items-center gap-3">
-															<img src={`/${code.toLowerCase()}.png`} className="w-8 h-8 rounded-full object-cover" alt={code} />
-															<span className="text-foreground text-base">
-																{info.code} ({info.symbol})  {info.name}
-															</span>
-														</div>
-														{isSelected && <Check className="w-5 h-5 text-[#A488F5]" />}
-													</button>
-												);
-											})}
-										</div>
-									</DrawerContent>
-								</Drawer>
+								<button className="flex items-center gap-1 text-foreground" onClick={openToDrawer}>
+									{toCurrency ? (
+										<>
+											<img src={`/${toCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={toCurrency} />
+											<span className="text-sm font-normal">{toCurrency} ({CURRENCY_INFO[toCurrency].symbol})</span>
+										</>
+									) : (
+										<span className="text-sm font-normal text-[#716860]">Select currency</span>
+									)}
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+								</button>
 							</div>
 							<div className="flex items-center justify-between">
 								<span className={`text-3xl font-normal ${numAmount > 0 && toCurrency ? 'text-foreground' : 'text-[#716860]'}`}>
@@ -466,6 +407,55 @@ const Convert: React.FC = () => {
 					</div>
 				</div>
 			</div>
+
+			{/* Single shared Drawer for both From and To currency selection */}
+			<Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+				<DrawerContent className="bg-white dark:bg-[#1C1C1E] border-border max-w-[480px] mx-auto">
+					<DrawerHeader>
+						<DrawerTitle className="text-foreground text-xl font-normal">
+							{drawerMode === 'from' ? 'Select currency' : 'Available currencies'}
+						</DrawerTitle>
+					</DrawerHeader>
+					{drawerMode === 'to' && (
+						<div className="px-4 pb-2">
+							<div className="relative">
+								<Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#716860]" />
+								<input
+									type="text"
+									placeholder="Type a currency"
+									value={searchQuery}
+									onChange={e => setSearchQuery(e.target.value)}
+									className="w-full pl-10 pr-4 py-3 bg-[#F3F3F3] dark:bg-[#2C2C2E] rounded-lg text-foreground placeholder:text-[#716860] outline-none border-none"
+								/>
+							</div>
+						</div>
+					)}
+					<div className="px-4 pb-8 max-h-[400px] overflow-y-auto">
+						{drawerCurrencies.map(code => {
+							const info = CURRENCY_INFO[code];
+							const isSelected = code === drawerSelected;
+							return (
+								<button
+									key={code}
+									onClick={() => handleCurrencySelect(code)}
+									className={`w-full flex items-center justify-between py-4 px-2 rounded-lg transition-colors ${
+										isSelected ? 'bg-[#F3F3F3] dark:bg-[#2C2C2E] border border-[#A488F5]' : 'hover:bg-[#F3F3F3] dark:hover:bg-[#2C2C2E]'
+									}`}
+								>
+									<div className="flex items-center gap-3">
+										<img src={`/${code.toLowerCase()}.png`} className="w-8 h-8 rounded-full object-cover" alt={code} />
+										<span className="text-foreground text-base">
+											{info.code} ({info.symbol})  {info.name}
+										</span>
+									</div>
+									{isSelected && <Check className="w-5 h-5 text-[#A488F5]" />}
+								</button>
+							);
+						})}
+					</div>
+				</DrawerContent>
+			</Drawer>
+
 			<BottomNavigation />
 		</div>
 	);
