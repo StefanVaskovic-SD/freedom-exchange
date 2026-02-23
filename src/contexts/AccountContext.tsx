@@ -40,7 +40,7 @@ export const CURRENCY_INFO: Record<string, { code: string; symbol: string; flag:
   GBP: { code: 'GBP', symbol: '£', flag: '🇬🇧', name: 'British Pound' },
   USD: { code: 'USD', symbol: '$', flag: '🇺🇸', name: 'US Dollar' },
   EUR: { code: 'EUR', symbol: '€', flag: '🇪🇺', name: 'Euro' },
-  AED: { code: 'AED', symbol: 'Dh', flag: '🇦🇪', name: 'United Arab Emirates Dirham' },
+  AED: { code: 'AED', symbol: '', flag: '🇦🇪', name: 'United Arab Emirates Dirham' },
   CAD: { code: 'CAD', symbol: '$', flag: '🇨🇦', name: 'Canadian Dollar' },
   AUD: { code: 'AUD', symbol: '$', flag: '🇦🇺', name: 'Australian Dollar' },
   JPY: { code: 'JPY', symbol: '¥', flag: '🇯🇵', name: 'Japanese Yen' },
