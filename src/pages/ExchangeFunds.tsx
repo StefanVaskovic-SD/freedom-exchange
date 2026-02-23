@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Search, Check } from 'lucide-react';
-import { useAccounts, CURRENCY_INFO, WALLET_CURRENCIES, convertCurrency, getExchangeRate } from '@/contexts/AccountContext';
+import { useAccounts, CURRENCY_INFO, convertCurrency, getExchangeRate } from '@/contexts/AccountContext';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/drawer';
 
 const ALL_CURRENCIES = Object.keys(CURRENCY_INFO);
+const FROM_CURRENCIES = ['GBP', 'EUR', 'USD'] as const;
 
 export const ExchangeFunds: React.FC = () => {
   const navigate = useNavigate();
@@ -126,7 +127,7 @@ export const ExchangeFunds: React.FC = () => {
               <Drawer open={fromCurrencyDrawerOpen} onOpenChange={setFromCurrencyDrawerOpen}>
                 <DrawerTrigger asChild>
                   <button className="flex items-center gap-1 text-foreground">
-                    <span className="text-lg">{CURRENCY_INFO[fromCurrency].flag}</span>
+                    <img src={`/${fromCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={fromCurrency} />
                     <span className="text-sm font-normal">{fromCurrency} ({CURRENCY_INFO[fromCurrency].symbol})</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                   </button>
@@ -136,7 +137,7 @@ export const ExchangeFunds: React.FC = () => {
                     <DrawerTitle className="text-foreground text-xl font-normal">Select currency</DrawerTitle>
                   </DrawerHeader>
                   <div className="px-4 pb-8">
-                    {WALLET_CURRENCIES.map(code => {
+                    {FROM_CURRENCIES.map(code => {
                       const info = CURRENCY_INFO[code];
                       const isSelected = code === fromCurrency;
                       return (
@@ -148,7 +149,7 @@ export const ExchangeFunds: React.FC = () => {
                           }`}
                         >
                           <div className="flex items-center gap-3">
-                            <span className="text-2xl">{info.flag}</span>
+                            <img src={`/${code.toLowerCase()}.png`} className="w-8 h-8 rounded-full object-cover" alt={code} />
                             <span className="text-foreground text-base">
                               {info.code} ({info.symbol})  {info.name}
                             </span>
@@ -194,7 +195,7 @@ export const ExchangeFunds: React.FC = () => {
               <Drawer open={toCurrencyDrawerOpen} onOpenChange={setToCurrencyDrawerOpen}>
                 <DrawerTrigger asChild>
                   <button className="flex items-center gap-1 text-foreground">
-                    <span className="text-lg">{CURRENCY_INFO[toCurrency].flag}</span>
+                    <img src={`/${toCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={toCurrency} />
                     <span className="text-sm font-normal">{toCurrency} ({CURRENCY_INFO[toCurrency].symbol})</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                   </button>
@@ -228,7 +229,7 @@ export const ExchangeFunds: React.FC = () => {
                           }`}
                         >
                           <div className="flex items-center gap-3">
-                            <span className="text-2xl">{info.flag}</span>
+                            <img src={`/${code.toLowerCase()}.png`} className="w-8 h-8 rounded-full object-cover" alt={code} />
                             <span className="text-foreground text-base">
                               {info.code} ({info.symbol})  {info.name}
                             </span>
