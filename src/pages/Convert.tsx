@@ -249,7 +249,7 @@ const Convert: React.FC = () => {
 								<span className="text-foreground/70 text-base">From</span>
 								<Drawer open={fromCurrencyDrawerOpen} onOpenChange={setFromCurrencyDrawerOpen}>
 									<DrawerTrigger asChild>
-										<button className="flex items-center gap-1 text-foreground">
+										<button className="flex items-center gap-1">
 											<img src={`/${fromCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={fromCurrency} />
 											<span className="text-sm font-normal">{fromCurrency} ({CURRENCY_INFO[fromCurrency].symbol})</span>
 											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
@@ -292,7 +292,7 @@ const Convert: React.FC = () => {
 									value={amount}
 									onChange={handleAmountChange}
 									placeholder="0.00"
-									className={`text-3xl font-normal bg-transparent border-none outline-none w-full ${exceedsBalance ? 'text-red-500' : 'text-foreground'}`}
+									className={`text-3xl font-normal bg-transparent border-none outline-none w-full ${exceedsBalance ? 'text-red-500' : ''}`}
 									style={{ caretColor: '#A488F5' }}
 									disabled={hasNoFunds}
 								/>
@@ -327,7 +327,7 @@ const Convert: React.FC = () => {
 								<span className="text-foreground/70 text-base">To</span>
 								<Drawer open={toCurrencyDrawerOpen} onOpenChange={setToCurrencyDrawerOpen}>
 									<DrawerTrigger asChild>
-										<button className="flex items-center gap-1 text-foreground">
+										<button className="flex items-center gap-1">
 											{toCurrency ? (
 												<>
 													<img src={`/${toCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={toCurrency} />
