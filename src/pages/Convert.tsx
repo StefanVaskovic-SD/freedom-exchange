@@ -81,8 +81,7 @@ const Convert: React.FC = () => {
 	const [fromCurrency, setFromCurrency] = useState<string>(initialCurrency);
 	const [toCurrency, setToCurrency] = useState<string>('');
 	const [amount, setAmount] = useState('');
-	const [fromCurrencyDrawerOpen, setFromCurrencyDrawerOpen] = useState(false);
-	const [toCurrencyDrawerOpen, setToCurrencyDrawerOpen] = useState(false);
+	const [activeDrawer, setActiveDrawer] = useState<'from' | 'to' | null>(null);
 	const [searchQuery, setSearchQuery] = useState('');
 
 	const handleTabChange = (code: string) => {
@@ -145,12 +144,12 @@ const Convert: React.FC = () => {
 
 	const handleFromCurrencySelect = (code: string) => {
 		handleTabChange(code);
-		setFromCurrencyDrawerOpen(false);
+		setActiveDrawer(null);
 	};
 
 	const handleToCurrencySelect = (code: string) => {
 		setToCurrency(code);
-		setToCurrencyDrawerOpen(false);
+		setActiveDrawer(null);
 		setSearchQuery('');
 	};
 
@@ -247,7 +246,7 @@ const Convert: React.FC = () => {
 						<div className={`bg-white dark:bg-[#211E1E] rounded-lg p-4 ${hasNoFunds || exceedsBalance ? 'ring-1 ring-red-500' : ''}`}>
 							<div className="flex items-center justify-between mb-1">
 								<span className="text-foreground/70 text-base">From</span>
-								<Drawer open={fromCurrencyDrawerOpen} onOpenChange={setFromCurrencyDrawerOpen}>
+								<Drawer open={activeDrawer === 'from'} onOpenChange={(open) => setActiveDrawer(open ? 'from' : null)}>
 									<DrawerTrigger asChild>
 										<button className="flex items-center gap-1">
 											<img src={`/${fromCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={fromCurrency} />
@@ -325,7 +324,7 @@ const Convert: React.FC = () => {
 						<div className="bg-white dark:bg-[#211E1E] rounded-lg p-4">
 							<div className="flex items-center justify-between mb-1">
 								<span className="text-foreground/70 text-base">To</span>
-								<Drawer open={toCurrencyDrawerOpen} onOpenChange={setToCurrencyDrawerOpen}>
+								<Drawer open={activeDrawer === 'to'} onOpenChange={(open) => setActiveDrawer(open ? 'to' : null)}>
 									<DrawerTrigger asChild>
 										<button className="flex items-center gap-1">
 											{toCurrency ? (
