@@ -46,7 +46,7 @@ export const CURRENCY_INFO: Record<string, { code: string; symbol: string; flag:
   JPY: { code: 'JPY', symbol: '¥', flag: '🇯🇵', name: 'Japanese Yen' },
 };
 
-export const WALLET_CURRENCIES = ['GBP', 'EUR', 'USD'] as const;
+export const WALLET_CURRENCIES = ['GBP', 'EUR', 'USD', 'AED', 'CAD', 'AUD', 'JPY'] as const;
 
 export function convertCurrency(fromCurrency: string, toCurrency: string, amount: number): number {
   if (fromCurrency === toCurrency) return amount;
@@ -64,6 +64,10 @@ const DEFAULT_CURRENCY_BALANCES: Record<string, number> = {
   GBP: 1040.0,
   EUR: 0,
   USD: 0,
+  AED: 0,
+  CAD: 0,
+  AUD: 0,
+  JPY: 0,
 };
 
 interface AccountContextType {
