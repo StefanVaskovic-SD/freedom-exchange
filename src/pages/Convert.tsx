@@ -1,6 +1,6 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAccounts, CURRENCY_INFO, WALLET_CURRENCIES, convertCurrency, getExchangeRate, ConvertTransaction } from "@/contexts/AccountContext";
+import { useAccounts, CURRENCY_INFO, WALLET_CURRENCIES, convertCurrency, getExchangeRate } from "@/contexts/AccountContext";
 import { ArrowLeft, ArrowDown, ArrowUp, ArrowRightLeft, Search, Check } from "lucide-react";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { Button } from "@/components/ui/button";
@@ -85,10 +85,12 @@ const Convert: React.FC = () => {
 	const [toCurrencyDrawerOpen, setToCurrencyDrawerOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState('');
 
-	useEffect(() => {
-		setFromCurrency(selectedCurrency);
+	const handleTabChange = (code: string) => {
+		setSelectedCurrency(code);
+		setFromCurrency(code);
 		setAmount('');
-	}, [selectedCurrency]);
+		if (toCurrency === code) setToCurrency('');
+	};
 
 	const currencyBalances = convertBalances;
 	const fromBalance = currencyBalances[fromCurrency] || 0;
@@ -142,12 +144,7 @@ const Convert: React.FC = () => {
 	};
 
 	const handleFromCurrencySelect = (code: string) => {
-		setSelectedCurrency(code);
-		setFromCurrency(code);
-		setAmount('');
-		if (toCurrency === code) {
-			setToCurrency('');
-		}
+		handleTabChange(code);
 		setFromCurrencyDrawerOpen(false);
 	};
 
@@ -197,7 +194,7 @@ const Convert: React.FC = () => {
 							return (
 								<button
 									key={code}
-									onClick={() => setSelectedCurrency(code)}
+									onClick={() => handleTabChange(code)}
 									className={`flex-shrink-0 flex items-center justify-center gap-1.5 px-3 py-[6px] rounded-[12px] text-sm font-normal transition-colors border bg-white dark:bg-[#211E1E] text-black dark:text-white ${
 										isActive
 											? 'border-[#716860] dark:border-white'
