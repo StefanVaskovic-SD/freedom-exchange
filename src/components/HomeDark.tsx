@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { StatusBar } from "./StatusBar";
 import { Header } from "./Header";
 import { AccountCard } from "./AccountCard";
@@ -184,36 +184,60 @@ export const HomeDark: React.FC = () => {
 
 				{/* Provider switcher drawer */}
 				<Drawer open={providerDrawerOpen} onOpenChange={setProviderDrawerOpen}>
-					<DrawerContent className="bg-[#1C1C1E] border-0 rounded-t-[20px] px-4 pb-8 pt-6 [&>div:first-child]:hidden">
-						<h2 className="text-white font-semibold mb-6" style={{ fontSize: '28px' }}>My providers</h2>
-						<div className="flex flex-col gap-2">
-							{PROVIDERS.map(provider => {
-								const isActive = currentProvider.id === provider.id;
-								return (
-									<button
-										key={provider.id}
-										className={`flex items-center justify-between px-4 py-3.5 rounded-[12px] transition-colors border ${
-											isActive ? 'border-[#716860]' : 'border-transparent'
-										}`}
-										onClick={() => handleSwitchProvider(provider.id)}
-									>
-										<div className="flex items-center gap-3">
-											{provider.iconUrl
-												? <img src={provider.iconUrl} alt={provider.name} className="w-8 h-8 rounded-full object-contain" />
-												: <div className="w-8 h-8 rounded-full bg-[#A488F5] flex items-center justify-center text-white text-sm font-semibold">
-														{provider.name.charAt(0)}
-													</div>
-											}
-											<span className="text-white text-base font-normal">{provider.name}</span>
-										</div>
-										{isActive && (
-											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
-												<path d="M20 6L9 17L4 12" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-											</svg>
-										)}
-									</button>
-								);
-							})}
+					<DrawerContent className="bg-[#1C1C1E] border-0 rounded-t-[20px] [&>div:first-child]:hidden flex flex-col" style={{ maxHeight: '85vh' }}>
+						{/* Fixed header */}
+						<div className="flex items-center justify-between px-4 pt-6 pb-4 shrink-0">
+							<h2 className="text-white font-semibold" style={{ fontSize: '28px' }}>My providers</h2>
+							<button
+								className="w-9 h-9 flex items-center justify-center rounded-full bg-[#2C2C2E] text-white"
+								onClick={() => setProviderDrawerOpen(false)}
+							>
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+									<path d="M18 6L6 18M6 6L18 18" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+								</svg>
+							</button>
+						</div>
+
+						{/* Scrollable list — stops pointer events from reaching Vaul's drag detector */}
+						<div
+							className="overflow-y-auto flex-1 px-4 pb-8"
+							onPointerDownCapture={e => e.stopPropagation()}
+							onTouchStartCapture={e => e.stopPropagation()}
+							ref={el => {
+								if (el && providerDrawerOpen) {
+									el.scrollTop = 0;
+								}
+							}}
+						>
+							<div className="flex flex-col gap-2">
+								{PROVIDERS.map(provider => {
+									const isActive = currentProvider.id === provider.id;
+									return (
+										<button
+											key={provider.id}
+											className={`flex items-center justify-between px-4 py-3.5 rounded-[12px] transition-colors border ${
+												isActive ? 'border-[#716860]' : 'border-transparent'
+											}`}
+											onClick={() => handleSwitchProvider(provider.id)}
+										>
+											<div className="flex items-center gap-3">
+												{provider.iconUrl
+													? <img src={provider.iconUrl} alt={provider.name} className="w-8 h-8 rounded-full object-contain" />
+													: <div className="w-8 h-8 rounded-full bg-[#A488F5] flex items-center justify-center text-white text-sm font-semibold">
+															{provider.name.charAt(0)}
+														</div>
+												}
+												<span className="text-white text-base font-normal">{provider.name}</span>
+											</div>
+											{isActive && (
+												<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+													<path d="M20 6L9 17L4 12" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+												</svg>
+											)}
+										</button>
+									);
+								})}
+							</div>
 						</div>
 					</DrawerContent>
 				</Drawer>
