@@ -48,6 +48,8 @@ export const HomeDark: React.FC = () => {
 	const headerRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLElement>(null);
 
+	const { replay: replayCardsStagger } = useAccountCardsStagger(accountsSectionRef);
+
 	const playEntryAnimation = () => {
 		if (!mainRef.current) return;
 		gsap.fromTo(
@@ -57,8 +59,6 @@ export const HomeDark: React.FC = () => {
 		);
 	};
 
-	useAccountCardsStagger(accountsSectionRef);
-
   useGSAP(() => {
 		playEntryAnimation();
 	}, []);
@@ -66,7 +66,10 @@ export const HomeDark: React.FC = () => {
 	const handleSwitchProvider = (id: string) => {
 		switchProvider(id);
 		setProviderDrawerOpen(false);
-		setTimeout(() => playEntryAnimation(), 50);
+		setTimeout(() => {
+			playEntryAnimation();
+			replayCardsStagger();
+		}, 50);
 	};
 
 	const formatBalance = (balance: number) => {
