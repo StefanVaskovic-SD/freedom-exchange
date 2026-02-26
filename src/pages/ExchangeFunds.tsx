@@ -41,8 +41,10 @@ export const ExchangeFunds: React.FC = () => {
     return getExchangeRate(fromCurrency, toCurrency);
   }, [fromCurrency, toCurrency]);
 
-  const exceedsBalance = numAmount > 0 && numAmount > fromBalance;
-  const isValidAmount = numAmount > 0 && numAmount <= fromBalance && toCurrency !== '';
+  const hasNoFunds = fromBalance === 0;
+  const exceedsBalance = !hasNoFunds && numAmount > 0 && numAmount > fromBalance;
+  const hasFromError = hasNoFunds || exceedsBalance;
+  const isValidAmount = numAmount > 0 && !hasNoFunds && numAmount <= fromBalance && toCurrency !== '';
 
   const availableToCurrencies = ALL_CURRENCIES.filter(c => c !== fromCurrency);
   
@@ -122,7 +124,7 @@ export const ExchangeFunds: React.FC = () => {
         {/* Exchange Cards */}
         <div className="">
           {/* FROM Card */}
-          <div className={`bg-white dark:bg-[#211E1E] rounded-lg p-4 ${exceedsBalance ? 'ring-1 ring-red-500' : ''}`}>
+          <div className={`bg-white dark:bg-[#211E1E] rounded-lg p-4 ${hasFromError ? 'ring-1 ring-red-500' : ''}`}>
             <div className="flex items-center justify-between mb-1">
               <span className="text-foreground/70 text-base">From</span>
               <Drawer open={fromCurrencyDrawerOpen} onOpenChange={setFromCurrencyDrawerOpen}>
@@ -170,13 +172,17 @@ export const ExchangeFunds: React.FC = () => {
                 value={amount}
                 onChange={handleAmountChange}
                 placeholder="0.00"
-                className={`text-3xl font-normal bg-transparent border-none outline-none w-full ${exceedsBalance ? 'text-red-500' : 'text-foreground'}`}
+                className={`text-3xl font-normal bg-transparent border-none outline-none w-full ${hasFromError ? 'text-red-500' : 'text-foreground'}`}
                 style={{ caretColor: '#A488F5' }}
                 autoFocus
               />
-              {exceedsBalance ? (
+              {hasNoFunds ? (
                 <span className="text-red-500 text-sm whitespace-nowrap ml-2">
-                  Insufficient funds {formatCurrencyAmount(fromBalance, fromCurrency)}
+                  No funds available
+                </span>
+              ) : exceedsBalance ? (
+                <span className="text-red-500 text-sm whitespace-nowrap ml-2">
+                  Insufficient funds
                 </span>
               ) : (
                 <span className="text-foreground/70 text-sm whitespace-nowrap ml-2">
