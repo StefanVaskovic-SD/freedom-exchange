@@ -140,7 +140,7 @@ const AccountDetail: React.FC = () => {
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
 	const location = useLocation();
-	const { accounts, transactions } = useAccounts();
+	const { accounts, transactions, currentProvider } = useAccounts();
 	const accountId = id as AccountType;
 
 	const initialCurrency = (location.state as any)?.selectedCurrency || 'GBP';
@@ -266,7 +266,16 @@ const AccountDetail: React.FC = () => {
 					{/* Credit Card */}
 					{config.showCard && (
 						<div className="mb-4">
-							<CreditCard cardholderName="Peter Smith" cardNumber="4562" validUntil="04/28" cvv="***" bankName="Mercer" cardType="freedom" />
+							<CreditCard
+						cardholderName="Peter Smith"
+						cardNumber="4562"
+						validUntil="04/28"
+						cvv="***"
+						bankName={currentProvider.name}
+						cardType="freedom"
+						cardBgUrl={currentProvider.cardBgUrl}
+						providerLogoUrl={currentProvider.logoUrl}
+					/>
 						</div>
 					)}
 

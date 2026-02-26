@@ -9,6 +9,7 @@ interface AccountCardProps {
 	balance: React.ReactNode;
 	onClick: () => void;
 	onMoveFunds?: () => void;
+	providerLogoUrl?: string | null;
 }
 
 export const AccountCard: React.FC<AccountCardProps> = ({
@@ -18,6 +19,7 @@ export const AccountCard: React.FC<AccountCardProps> = ({
 	balance,
 	onClick,
 	onMoveFunds,
+	providerLogoUrl,
 }) => {
 	const getBackgroundColor = () => {
 		switch (type) {
@@ -76,11 +78,10 @@ export const AccountCard: React.FC<AccountCardProps> = ({
 			<div className="flex justify-between items-center">
 				<div className="">
           <div className="mb-2.5">
-					<MercerLogo
-						className={getTextColor()}
-						style={{ color: "#FFFFFF" }}
-						// style={{ color: type === "pension" ? "#FFFFFF" : "#211E1E" }}
-            />
+					{providerLogoUrl
+						? <img src={providerLogoUrl} alt="Provider logo" className="h-4 object-contain" />
+						: <MercerLogo className={getTextColor()} style={{ color: "#FFFFFF" }} />
+					}
           </div>
 					<h2
 						className={`${getTextColor()} text-[18px] font-normal leading-tight`}

@@ -8,6 +8,8 @@ interface CreditCardProps {
 	cvv?: string;
 	bankName: string;
 	cardType: string;
+	cardBgUrl?: string;
+	providerLogoUrl?: string | null;
 }
 
 export const CreditCard: React.FC<CreditCardProps> = ({
@@ -17,9 +19,14 @@ export const CreditCard: React.FC<CreditCardProps> = ({
 	cvv = "***",
 	bankName,
 	cardType,
+	cardBgUrl = '/card-background.webp',
+	providerLogoUrl,
 }) => {
 	return (
-		<div className="relative bg-[url('/card-background.webp')] bg-cover bg-center rounded-[9px] p-6 flex flex-col justify-between overflow-hidden">
+		<div
+			className="relative bg-cover bg-center rounded-[9px] p-6 flex flex-col justify-between overflow-hidden"
+			style={{ backgroundImage: `url('${cardBgUrl}')` }}
+		>
 			{/* Menu button - absolute top right */}
 			<div className="absolute top-6 right-6 z-20 w-10 h-10 rounded-full bg-black flex items-center justify-center">
 				<div className="flex flex-col gap-1">
@@ -54,9 +61,12 @@ export const CreditCard: React.FC<CreditCardProps> = ({
 				</div>
 			</div>
 
-			{/* Bottom logos row */}
-			<div className="flex justify-between items-end w-full relative z-10">
-				<MercerLogo />
+		{/* Bottom logos row */}
+		<div className="flex justify-between items-end w-full relative z-10">
+			{providerLogoUrl
+				? <img src={providerLogoUrl} alt="Provider logo" className="h-4 object-contain" />
+				: <MercerLogo />
+			}
 				<svg xmlns="http://www.w3.org/2000/svg" width="78" height="20" viewBox="0 0 78 20" fill="none">
 					<g clipPath="url(#clip0_1649_2127)">
 						<path d="M71.5714 17.5091H69.7675V17.1985C69.7675 15.2084 69.7754 13.2189 69.7624 11.2289C69.7591 10.6977 69.6288 10.1833 69.3661 9.71509C69.1108 9.25957 68.7015 9.01016 68.2212 8.8895C67.5447 8.71919 66.8886 8.81445 66.3186 9.22551C65.6704 9.69373 65.2583 10.3681 65.216 11.17C65.1427 12.5567 65.1602 13.9487 65.1461 15.3389C65.1388 16.0571 65.145 16.7753 65.145 17.5079H63.3613V7.67594H65.1281V9.21107C65.8603 7.91785 66.985 7.34282 68.3802 7.38497C69.8036 7.42769 70.8657 8.01542 71.3595 9.45125C71.55 9.16431 71.7129 8.84735 71.9401 8.59102C72.5518 7.90053 73.3083 7.50332 74.2362 7.41845C75.062 7.3434 75.8405 7.44847 76.5491 7.88667C77.3564 8.38549 77.7245 9.19433 77.8767 10.1042C77.9624 10.6169 77.9895 11.144 77.9928 11.6653C78.0064 13.5012 77.9979 15.3372 77.9979 17.1737V17.5039H76.194V17.1846C76.194 15.2044 76.2041 13.2241 76.1878 11.2439C76.1833 10.6758 76.0474 10.1279 75.7357 9.63541C75.4527 9.18856 75.0344 8.9761 74.553 8.87276C73.0174 8.54368 71.7524 9.76647 71.6396 11.2029C71.5607 12.2034 71.5827 13.2126 71.5743 14.2183C71.5647 15.3043 71.572 16.3902 71.572 17.5091H71.5714Z" fill="white"/>

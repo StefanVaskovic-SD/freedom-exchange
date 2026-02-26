@@ -92,6 +92,8 @@ interface AccountContextType {
   convertBalances: Record<string, number>;
   convertTransactions: ConvertTransaction[];
   exchangeConvertFunds: (fromCurrency: string, toCurrency: string, fromAmount: number, toAmount: number) => void;
+  currentProvider: ProviderConfig;
+  switchProvider: (id: string) => void;
 }
 
 const AccountContext = createContext<AccountContextType | undefined>(undefined);
@@ -135,11 +137,6 @@ const INITIAL_ACCOUNTS: Record<AccountType, Account> = {
   },
 };
 
-const STORAGE_KEY = 'account_balances';
-const TRANSACTIONS_KEY = 'account_transactions';
-const CONVERT_BALANCES_KEY = 'convert_balances';
-const CONVERT_TRANSACTIONS_KEY = 'convert_transactions';
-
 const DEFAULT_CONVERT_BALANCES: Record<string, number> = {
   GBP: 1000.0,
   EUR: 0,
@@ -157,64 +154,114 @@ const INITIAL_TRANSACTIONS: Transaction[] = [
   { id: "3", type: "transfer", account: "savings", amount: 500.00, date: new Date("2025-10-10T10:20:00"), recipient: "From Current Account", status: "completed" },
 ];
 
+// ── Provider config ──────────────────────────────────────────────────────────
+export interface ProviderConfig {
+  id: string;
+  name: string;
+  iconUrl: string | null;   // small circle icon for switcher list
+  logoUrl: string | null;   // logo shown on account cards
+  cardBgUrl: string;        // credit card background image
+}
+
+export const PROVIDERS: ProviderConfig[] = [
+  {
+    id: 'ifgl',
+    name: 'IFGL Pensions',
+    iconUrl: null,
+    logoUrl: null,
+    cardBgUrl: '/card-background.webp',
+  },
+  {
+    id: 'prudential',
+    name: 'Prudential',
+    iconUrl: '/Prudential-icon.png',
+    logoUrl: '/Prudential-logo.svg',
+    cardBgUrl: '/Prudential-CARD.png',
+  },
+];
+
+// ── Storage helpers ───────────────────────────────────────────────────────────
+const CURRENT_PROVIDER_KEY = 'current_provider';
+
+const getKeys = (pid: string) => ({
+  accounts:          `account_balances_${pid}`,
+  transactions:      `account_transactions_${pid}`,
+  convertBalances:   `convert_balances_${pid}`,
+  convertTxns:       `convert_transactions_${pid}`,
+});
+
+const loadAccounts = (pid: string): Record<AccountType, Account> => {
+  const stored = localStorage.getItem(`account_balances_${pid}`);
+  if (stored) {
+    try {
+      const p = JSON.parse(stored);
+      return {
+        ...INITIAL_ACCOUNTS,
+        pension:        { ...INITIAL_ACCOUNTS.pension,        balance: p.pension        || INITIAL_ACCOUNTS.pension.balance },
+        savings:        { ...INITIAL_ACCOUNTS.savings,        balance: p.savings        || INITIAL_ACCOUNTS.savings.balance },
+        currentAccount: { ...INITIAL_ACCOUNTS.currentAccount, balance: p.currentAccount || INITIAL_ACCOUNTS.currentAccount.balance,
+          currencyBalances: p.currencyBalances || DEFAULT_CURRENCY_BALANCES },
+      };
+    } catch { return { ...INITIAL_ACCOUNTS }; }
+  }
+  return { ...INITIAL_ACCOUNTS };
+};
+
+const loadTransactions = (pid: string): Transaction[] => {
+  const stored = localStorage.getItem(`account_transactions_${pid}`);
+  if (stored) {
+    try { return JSON.parse(stored).map((t: any) => ({ ...t, date: new Date(t.date) })); }
+    catch { return INITIAL_TRANSACTIONS; }
+  }
+  return INITIAL_TRANSACTIONS;
+};
+
+const loadConvertBalances = (pid: string): Record<string, number> => {
+  const stored = localStorage.getItem(`convert_balances_${pid}`);
+  if (stored) { try { return JSON.parse(stored); } catch {} }
+  return { ...DEFAULT_CONVERT_BALANCES };
+};
+
+const loadConvertTxns = (pid: string): ConvertTransaction[] => {
+  const stored = localStorage.getItem(`convert_transactions_${pid}`);
+  if (stored) {
+    try { return JSON.parse(stored).map((t: any) => ({ ...t, date: new Date(t.date) })); }
+    catch { return []; }
+  }
+  return [];
+};
+
 export const AccountProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [accounts, setAccounts] = useState<Record<AccountType, Account>>(() => {
-    // Load from localStorage on initialization
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        const storedCurrencyBalances = parsed.currencyBalances || DEFAULT_CURRENCY_BALANCES;
-        return {
-          ...INITIAL_ACCOUNTS,
-          pension: { ...INITIAL_ACCOUNTS.pension, balance: parsed.pension || INITIAL_ACCOUNTS.pension.balance },
-          savings: { ...INITIAL_ACCOUNTS.savings, balance: parsed.savings || INITIAL_ACCOUNTS.savings.balance },
-          currentAccount: {
-            ...INITIAL_ACCOUNTS.currentAccount,
-            balance: parsed.currentAccount || INITIAL_ACCOUNTS.currentAccount.balance,
-            currencyBalances: storedCurrencyBalances,
-          }
-        };
-      } catch (e) {
-        return INITIAL_ACCOUNTS;
-      }
-    }
-    return INITIAL_ACCOUNTS;
-  });
+  const [currentProviderId, setCurrentProviderId] = useState<string>(() =>
+    localStorage.getItem(CURRENT_PROVIDER_KEY) || 'ifgl'
+  );
 
-  const [transactions, setTransactions] = useState<Transaction[]>(() => {
-    // Load from localStorage on initialization
-    const stored = localStorage.getItem(TRANSACTIONS_KEY);
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        // Convert date strings back to Date objects
-        return parsed.map((t: any) => ({
-          ...t,
-          date: new Date(t.date)
-        }));
-      } catch (e) {
-        return INITIAL_TRANSACTIONS;
-      }
-    }
-    return INITIAL_TRANSACTIONS;
-  });
+  const currentProvider = PROVIDERS.find(p => p.id === currentProviderId) || PROVIDERS[0];
 
-  // Persist to localStorage whenever accounts change
+  const [accounts, setAccounts] = useState<Record<AccountType, Account>>(() =>
+    loadAccounts(localStorage.getItem(CURRENT_PROVIDER_KEY) || 'ifgl')
+  );
+
+  const [transactions, setTransactions] = useState<Transaction[]>(() =>
+    loadTransactions(localStorage.getItem(CURRENT_PROVIDER_KEY) || 'ifgl')
+  );
+
+  // Persist accounts
   useEffect(() => {
+    const keys = getKeys(currentProviderId);
     const balances = {
       pension: accounts.pension.balance,
       savings: accounts.savings.balance,
       currentAccount: accounts.currentAccount.balance,
       currencyBalances: accounts.currentAccount.currencyBalances,
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(balances));
-  }, [accounts]);
+    localStorage.setItem(keys.accounts, JSON.stringify(balances));
+  }, [accounts, currentProviderId]);
 
-  // Persist transactions to localStorage
+  // Persist transactions
   useEffect(() => {
-    localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(transactions));
-  }, [transactions]);
+    localStorage.setItem(getKeys(currentProviderId).transactions, JSON.stringify(transactions));
+  }, [transactions, currentProviderId]);
 
   const updateBalance = (accountId: AccountType, newBalance: number) => {
     setAccounts(prev => ({
@@ -338,31 +385,43 @@ export const AccountProvider: React.FC<{ children: ReactNode }> = ({ children })
   }, []);
 
   // Convert wallet state
-  const [convertBalances, setConvertBalances] = useState<Record<string, number>>(() => {
-    const stored = localStorage.getItem(CONVERT_BALANCES_KEY);
-    if (stored) {
-      try { return JSON.parse(stored); } catch { return { ...DEFAULT_CONVERT_BALANCES }; }
-    }
-    return { ...DEFAULT_CONVERT_BALANCES };
-  });
+  const [convertBalances, setConvertBalances] = useState<Record<string, number>>(() =>
+    loadConvertBalances(localStorage.getItem(CURRENT_PROVIDER_KEY) || 'ifgl')
+  );
 
-  const [convertTransactions, setConvertTransactions] = useState<ConvertTransaction[]>(() => {
-    const stored = localStorage.getItem(CONVERT_TRANSACTIONS_KEY);
-    if (stored) {
-      try {
-        return JSON.parse(stored).map((t: any) => ({ ...t, date: new Date(t.date) }));
-      } catch { return []; }
-    }
-    return [];
-  });
+  const [convertTransactions, setConvertTransactions] = useState<ConvertTransaction[]>(() =>
+    loadConvertTxns(localStorage.getItem(CURRENT_PROVIDER_KEY) || 'ifgl')
+  );
 
   useEffect(() => {
-    localStorage.setItem(CONVERT_BALANCES_KEY, JSON.stringify(convertBalances));
-  }, [convertBalances]);
+    localStorage.setItem(getKeys(currentProviderId).convertBalances, JSON.stringify(convertBalances));
+  }, [convertBalances, currentProviderId]);
 
   useEffect(() => {
-    localStorage.setItem(CONVERT_TRANSACTIONS_KEY, JSON.stringify(convertTransactions));
-  }, [convertTransactions]);
+    localStorage.setItem(getKeys(currentProviderId).convertTxns, JSON.stringify(convertTransactions));
+  }, [convertTransactions, currentProviderId]);
+
+  const switchProvider = useCallback((newId: string) => {
+    if (newId === currentProviderId) return;
+    // Force-save current state before switching
+    const keys = getKeys(currentProviderId);
+    localStorage.setItem(keys.accounts, JSON.stringify({
+      pension: accounts.pension.balance,
+      savings: accounts.savings.balance,
+      currentAccount: accounts.currentAccount.balance,
+      currencyBalances: accounts.currentAccount.currencyBalances,
+    }));
+    localStorage.setItem(keys.transactions, JSON.stringify(transactions));
+    localStorage.setItem(keys.convertBalances, JSON.stringify(convertBalances));
+    localStorage.setItem(keys.convertTxns, JSON.stringify(convertTransactions));
+
+    localStorage.setItem(CURRENT_PROVIDER_KEY, newId);
+    setCurrentProviderId(newId);
+    setAccounts(loadAccounts(newId));
+    setTransactions(loadTransactions(newId));
+    setConvertBalances(loadConvertBalances(newId));
+    setConvertTransactions(loadConvertTxns(newId));
+  }, [currentProviderId, accounts, transactions, convertBalances, convertTransactions]);
 
   const exchangeConvertFunds = useCallback((fromCurrency: string, toCurrency: string, fromAmount: number, toAmount: number) => {
     setConvertBalances(prev => {
@@ -393,7 +452,7 @@ export const AccountProvider: React.FC<{ children: ReactNode }> = ({ children })
   };
 
   return (
-    <AccountContext.Provider value={{ accounts, transactions, updateBalance, transferFunds, exchangeFunds, getAccount, convertBalances, convertTransactions, exchangeConvertFunds }}>
+    <AccountContext.Provider value={{ accounts, transactions, updateBalance, transferFunds, exchangeFunds, getAccount, convertBalances, convertTransactions, exchangeConvertFunds, currentProvider, switchProvider }}>
       {children}
     </AccountContext.Provider>
   );

@@ -7,13 +7,14 @@ import { LearningResourceCard } from "./LearningResourceCard";
 import { BottomNavigation } from "./BottomNavigation";
 import { CreditCard } from "./CreditCard";
 import { AccountActions } from "./AccountActions";
-import { useAccounts } from "@/contexts/AccountContext";
+import { useAccounts, PROVIDERS } from "@/contexts/AccountContext";
 import { useNavigate } from "react-router-dom";
 import { currentAccountActions } from "@/pages/AccountDetail";
 import { ArrowRight } from "lucide-react";
 import { useAccountCardsStagger } from "@/hooks/useAccountCardsStagger";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
 
 const mockArticles = [
 	{
@@ -40,7 +41,8 @@ const mockArticles = [
 
 export const HomeDark: React.FC = () => {
 	const [showAllPromotions, setShowAllPromotions] = useState(false);
-	const { accounts } = useAccounts();
+	const [providerDrawerOpen, setProviderDrawerOpen] = useState(false);
+	const { accounts, currentProvider, switchProvider } = useAccounts();
 	const navigate = useNavigate();
 	const accountsSectionRef = useRef<HTMLElement>(null);
 	const headerRef = useRef<HTMLDivElement>(null);
@@ -135,43 +137,102 @@ export const HomeDark: React.FC = () => {
 					<Header />
 				</div>
 
-				<main ref={mainRef} className="w-full mt-4 px-4">
-					<section
-						ref={accountsSectionRef}
-						aria-label="Account overview"
-						className="w-full"
-					>
-						<div className="mb-[-32px]">
-							<AccountCard
-								type="pension"
-								accountName="Pension"
-								subtitle=""
-								balance={formatBalance(accounts.pension.balance)}
-								onClick={() => navigate("/account/pension")}
-							/>
-						</div>
+			<main ref={mainRef} className="w-full mt-4 px-4">
+				{/* Provider switcher bar */}
+				<button
+					className="w-full flex items-center justify-between mb-4 px-3 py-2.5 rounded-[9px] bg-white dark:bg-[#1A1A1A] active:opacity-80 transition-opacity"
+					onClick={() => setProviderDrawerOpen(true)}
+				>
+					<div className="flex items-center gap-2.5">
+						{currentProvider.iconUrl
+							? <img src={currentProvider.iconUrl} alt={currentProvider.name} className="w-7 h-7 rounded-full object-contain" />
+							: <div className="w-7 h-7 rounded-full bg-[#A488F5] flex items-center justify-center text-white text-xs font-semibold">
+									{currentProvider.name.charAt(0)}
+								</div>
+						}
+						<span className="text-foreground text-sm font-medium">{currentProvider.name}</span>
+					</div>
+					<span className="text-[14px] font-normal" style={{ color: '#A488F5' }}>Switch provider</span>
+				</button>
 
-						<div className="mb-[-32px]">
-							<AccountCard
-								type="savings"
-								accountName="Savings"
-								subtitle=""
-								balance={formatBalance(accounts.savings.balance)}
-								onClick={() => navigate("/account/savings")}
-							/>
-						</div>
+				<section
+					ref={accountsSectionRef}
+					aria-label="Account overview"
+					className="w-full"
+				>
+					<div className="mb-[-32px]">
+						<AccountCard
+							type="pension"
+							accountName="Pension"
+							subtitle=""
+							balance={formatBalance(accounts.pension.balance)}
+							onClick={() => navigate("/account/pension")}
+							providerLogoUrl={currentProvider.logoUrl}
+						/>
+					</div>
 
-						<div className="mt-0">
-							<AccountCard
-								type="current"
-								accountName="Current Account"
-								subtitle=""
-								balance={formatBalance(accounts.currentAccount.currencyBalances?.GBP ?? accounts.currentAccount.balance)}
-								onClick={() => navigate("/account/currentAccount")}
-								onMoveFunds={() => navigate("/pension-warning")}
-							/>
+					<div className="mb-[-32px]">
+						<AccountCard
+							type="savings"
+							accountName="Savings"
+							subtitle=""
+							balance={formatBalance(accounts.savings.balance)}
+							onClick={() => navigate("/account/savings")}
+							providerLogoUrl={currentProvider.logoUrl}
+						/>
+					</div>
+
+					<div className="mt-0">
+						<AccountCard
+							type="current"
+							accountName="Current Account"
+							subtitle=""
+							balance={formatBalance(accounts.currentAccount.currencyBalances?.GBP ?? accounts.currentAccount.balance)}
+							onClick={() => navigate("/account/currentAccount")}
+							onMoveFunds={() => navigate("/pension-warning")}
+							providerLogoUrl={currentProvider.logoUrl}
+						/>
+					</div>
+				</section>
+
+				{/* Provider switcher drawer */}
+				<Drawer open={providerDrawerOpen} onOpenChange={setProviderDrawerOpen}>
+					<DrawerContent className="bg-[#1C1C1E] border-0 rounded-t-[20px] px-4 pb-8 pt-4">
+						<div className="w-10 h-1 bg-[#3A3A3C] rounded-full mx-auto mb-6" />
+						<h2 className="text-white text-lg font-semibold mb-4">My providers</h2>
+						<div className="flex flex-col gap-2">
+							{PROVIDERS.map(provider => (
+								<button
+									key={provider.id}
+									className={`flex items-center justify-between px-4 py-3.5 rounded-[12px] transition-colors ${
+										currentProvider.id === provider.id
+											? 'bg-[#2C2C2E]'
+											: 'bg-[#2C2C2E]/50 active:bg-[#2C2C2E]'
+									}`}
+									onClick={() => {
+										switchProvider(provider.id);
+										setProviderDrawerOpen(false);
+									}}
+								>
+									<div className="flex items-center gap-3">
+										{provider.iconUrl
+											? <img src={provider.iconUrl} alt={provider.name} className="w-8 h-8 rounded-full object-contain" />
+											: <div className="w-8 h-8 rounded-full bg-[#A488F5] flex items-center justify-center text-white text-sm font-semibold">
+													{provider.name.charAt(0)}
+												</div>
+										}
+										<span className="text-white text-base font-normal">{provider.name}</span>
+									</div>
+									{currentProvider.id === provider.id && (
+										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+											<path d="M20 6L9 17L4 12" stroke="#A488F5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+										</svg>
+									)}
+								</button>
+							))}
 						</div>
-					</section>
+					</DrawerContent>
+				</Drawer>
 
 					<div className="mb-6">
 						<div className="mt-4">
