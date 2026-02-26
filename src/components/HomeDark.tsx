@@ -182,9 +182,12 @@ export const HomeDark: React.FC = () => {
 					</div>
 				</section>
 
-				{/* Provider switcher drawer */}
-				<Drawer open={providerDrawerOpen} onOpenChange={setProviderDrawerOpen}>
-					<DrawerContent className="bg-[#1C1C1E] border-0 rounded-t-[20px] [&>div:first-child]:hidden flex flex-col" style={{ height: '85vh' }}>
+				{/* Provider switcher drawer — dismissible=false disables drag-to-close so inner scroll works */}
+				<Drawer open={providerDrawerOpen} onOpenChange={setProviderDrawerOpen} dismissible={false}>
+					<DrawerContent
+						className="bg-[#1C1C1E] border-0 rounded-t-[20px] [&>div:first-child]:hidden flex flex-col"
+						style={{ height: 'calc(82 * 1svh)' }}
+					>
 						{/* Fixed header */}
 						<div className="flex items-center justify-between px-4 pt-6 pb-4 shrink-0">
 							<h2 className="text-white font-semibold" style={{ fontSize: '28px' }}>My providers</h2>
@@ -198,15 +201,11 @@ export const HomeDark: React.FC = () => {
 							</button>
 						</div>
 
-						{/* Scrollable list — stops pointer events from reaching Vaul's drag detector */}
+						{/* Scrollable list */}
 						<div
-							className="overflow-y-auto flex-1 min-h-0 px-4 pb-8"
-							onPointerDownCapture={e => e.stopPropagation()}
-							onTouchStartCapture={e => e.stopPropagation()}
+							className="overflow-y-scroll flex-1 min-h-0 px-4 pb-8"
 							ref={el => {
-								if (el && providerDrawerOpen) {
-									el.scrollTop = 0;
-								}
+								if (el && providerDrawerOpen) el.scrollTop = 0;
 							}}
 						>
 							<div className="flex flex-col gap-2">
