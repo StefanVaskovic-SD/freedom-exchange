@@ -185,18 +185,18 @@ export const HomeDark: React.FC = () => {
 				{/* Provider switcher drawer — dismissible=false disables drag-to-close so inner scroll works */}
 				<Drawer open={providerDrawerOpen} onOpenChange={setProviderDrawerOpen} dismissible={false}>
 					<DrawerContent
-						className="bg-[#1C1C1E] border-0 rounded-t-[20px] [&>div:first-child]:hidden flex flex-col"
+						className="bg-white dark:bg-[#1C1C1E] border-0 rounded-t-[20px] [&>div:first-child]:hidden flex flex-col"
 						style={{ height: 'calc(82 * 1svh)' }}
 					>
 						{/* Fixed header */}
 						<div className="flex items-center justify-between px-4 pt-6 pb-4 shrink-0">
-							<h2 className="text-white font-semibold" style={{ fontSize: '28px' }}>My providers</h2>
+							<h2 className="text-foreground font-semibold" style={{ fontSize: '28px' }}>My providers</h2>
 							<button
-								className="w-9 h-9 flex items-center justify-center rounded-full bg-[#2C2C2E] text-white"
+								className="w-9 h-9 flex items-center justify-center rounded-full bg-[#F3F3F3] dark:bg-[#2C2C2E] text-foreground"
 								onClick={() => setProviderDrawerOpen(false)}
 							>
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
-									<path d="M18 6L6 18M6 6L18 18" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+									<path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
 								</svg>
 							</button>
 						</div>
@@ -226,11 +226,11 @@ export const HomeDark: React.FC = () => {
 															{provider.name.charAt(0)}
 														</div>
 												}
-												<span className="text-white text-base font-normal">{provider.name}</span>
+												<span className="text-foreground text-base font-normal">{provider.name}</span>
 											</div>
 											{isActive && (
 												<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
-													<path d="M20 6L9 17L4 12" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+													<path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
 												</svg>
 											)}
 										</button>
