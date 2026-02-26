@@ -184,7 +184,7 @@ export const HomeDark: React.FC = () => {
 
 				{/* Provider switcher drawer */}
 				<Drawer open={providerDrawerOpen} onOpenChange={setProviderDrawerOpen}>
-					<DrawerContent className="bg-[#1C1C1E] border-0 rounded-t-[20px] [&>div:first-child]:hidden flex flex-col" style={{ maxHeight: '85vh' }}>
+					<DrawerContent className="bg-[#1C1C1E] border-0 rounded-t-[20px] [&>div:first-child]:hidden flex flex-col" style={{ height: '85vh' }}>
 						{/* Fixed header */}
 						<div className="flex items-center justify-between px-4 pt-6 pb-4 shrink-0">
 							<h2 className="text-white font-semibold" style={{ fontSize: '28px' }}>My providers</h2>
@@ -200,7 +200,7 @@ export const HomeDark: React.FC = () => {
 
 						{/* Scrollable list — stops pointer events from reaching Vaul's drag detector */}
 						<div
-							className="overflow-y-auto flex-1 px-4 pb-8"
+							className="overflow-y-auto flex-1 min-h-0 px-4 pb-8"
 							onPointerDownCapture={e => e.stopPropagation()}
 							onTouchStartCapture={e => e.stopPropagation()}
 							ref={el => {
