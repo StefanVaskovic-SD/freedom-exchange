@@ -48,42 +48,26 @@ export const HomeDark: React.FC = () => {
 	const headerRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLElement>(null);
 
-	useAccountCardsStagger(accountsSectionRef);
-
-	// useGSAP(() => {
-	// 	if (!headerRef.current) return;
-
-	// 	gsap.fromTo(
-	// 		headerRef.current,
-	// 		{
-	// 			y: "-100%",
-	// 		},
-	// 		{
-	// 			y: "0%",
-	// 			duration: 1,
-	// 			ease: "power2.out",
-  //       delay: 0.3, // Počinje nakon main animacije
-	// 		}
-	// 	);
-	// }, []);
-
-  useGSAP(() => {
+	const playEntryAnimation = () => {
 		if (!mainRef.current) return;
-
 		gsap.fromTo(
 			mainRef.current,
-			{
-				y: 100,
-				opacity: 0,
-			},
-			{
-				y: 0,
-				opacity: 2,
-				duration: 0.6,
-				ease: "power2.out",
-			}
+			{ y: 100, opacity: 0 },
+			{ y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }
 		);
+	};
+
+	useAccountCardsStagger(accountsSectionRef);
+
+  useGSAP(() => {
+		playEntryAnimation();
 	}, []);
+
+	const handleSwitchProvider = (id: string) => {
+		switchProvider(id);
+		setProviderDrawerOpen(false);
+		setTimeout(() => playEntryAnimation(), 50);
+	};
 
 	const formatBalance = (balance: number) => {
 		const parts = balance
@@ -208,10 +192,7 @@ export const HomeDark: React.FC = () => {
 										className={`flex items-center justify-between px-4 py-3.5 rounded-[12px] transition-colors border ${
 											isActive ? 'border-[#716860]' : 'border-transparent'
 										}`}
-										onClick={() => {
-											switchProvider(provider.id);
-											setProviderDrawerOpen(false);
-										}}
+										onClick={() => handleSwitchProvider(provider.id)}
 									>
 										<div className="flex items-center gap-3">
 											{provider.iconUrl
