@@ -197,39 +197,39 @@ export const HomeDark: React.FC = () => {
 
 				{/* Provider switcher drawer */}
 				<Drawer open={providerDrawerOpen} onOpenChange={setProviderDrawerOpen}>
-					<DrawerContent className="bg-[#1C1C1E] border-0 rounded-t-[20px] px-4 pb-8 pt-4">
-						<div className="w-10 h-1 bg-[#3A3A3C] rounded-full mx-auto mb-6" />
-						<h2 className="text-white text-lg font-semibold mb-4">My providers</h2>
+					<DrawerContent className="bg-[#1C1C1E] border-0 rounded-t-[20px] px-4 pb-8 pt-6 [&>div:first-child]:hidden">
+						<h2 className="text-white font-semibold mb-6" style={{ fontSize: '28px' }}>My providers</h2>
 						<div className="flex flex-col gap-2">
-							{PROVIDERS.map(provider => (
-								<button
-									key={provider.id}
-									className={`flex items-center justify-between px-4 py-3.5 rounded-[12px] transition-colors ${
-										currentProvider.id === provider.id
-											? 'bg-[#2C2C2E]'
-											: 'bg-[#2C2C2E]/50 active:bg-[#2C2C2E]'
-									}`}
-									onClick={() => {
-										switchProvider(provider.id);
-										setProviderDrawerOpen(false);
-									}}
-								>
-									<div className="flex items-center gap-3">
-										{provider.iconUrl
-											? <img src={provider.iconUrl} alt={provider.name} className="w-8 h-8 rounded-full object-contain" />
-											: <div className="w-8 h-8 rounded-full bg-[#A488F5] flex items-center justify-center text-white text-sm font-semibold">
-													{provider.name.charAt(0)}
-												</div>
-										}
-										<span className="text-white text-base font-normal">{provider.name}</span>
-									</div>
-									{currentProvider.id === provider.id && (
-										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
-											<path d="M20 6L9 17L4 12" stroke="#A488F5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-										</svg>
-									)}
-								</button>
-							))}
+							{PROVIDERS.map(provider => {
+								const isActive = currentProvider.id === provider.id;
+								return (
+									<button
+										key={provider.id}
+										className={`flex items-center justify-between px-4 py-3.5 rounded-[12px] transition-colors border ${
+											isActive ? 'border-[#716860]' : 'border-transparent'
+										}`}
+										onClick={() => {
+											switchProvider(provider.id);
+											setProviderDrawerOpen(false);
+										}}
+									>
+										<div className="flex items-center gap-3">
+											{provider.iconUrl
+												? <img src={provider.iconUrl} alt={provider.name} className="w-8 h-8 rounded-full object-contain" />
+												: <div className="w-8 h-8 rounded-full bg-[#A488F5] flex items-center justify-center text-white text-sm font-semibold">
+														{provider.name.charAt(0)}
+													</div>
+											}
+											<span className="text-white text-base font-normal">{provider.name}</span>
+										</div>
+										{isActive && (
+											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+												<path d="M20 6L9 17L4 12" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+											</svg>
+										)}
+									</button>
+								);
+							})}
 						</div>
 					</DrawerContent>
 				</Drawer>
