@@ -167,8 +167,8 @@ export const PROVIDERS: ProviderConfig[] = [
   {
     id: 'ifgl',
     name: 'IFGL Pensions',
-    iconUrl: null,
-    logoUrl: null,
+    iconUrl: '/ifgl-icon.png',
+    logoUrl: '/ifgl-logo.png',
     cardBgUrl: '/card-background.webp',
   },
   {
