@@ -181,16 +181,16 @@ export const PROVIDERS: ProviderConfig[] = [
   {
     id: 'blumont-annuity',
     name: 'Blumont Annuity',
-    iconUrl: '/blumont-annuity-icon.png',
-    logoUrl: '/blumont-annuity-logo.png',
-    cardBgUrl: '/blumont-annuity-logo.png',
+    iconUrl: '/blumont-icon.png',
+    logoUrl: '/blumont-logo.svg',
+    cardBgUrl: '/blumont-card.png',
   },
   {
     id: 'utmost',
     name: 'Utmost',
     iconUrl: '/utmost-icon.png',
-    logoUrl: '/utmost-logo.png',
-    cardBgUrl: '/utmost-logo.png',
+    logoUrl: '/utmost-logo.svg',
+    cardBgUrl: '/utmost-card.png',
   },
   {
     id: 'just-group',
