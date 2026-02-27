@@ -217,7 +217,7 @@ export const PROVIDERS: ProviderConfig[] = [
     id: 'amey',
     name: 'Amey',
     iconUrl: '/amey-icon.png',
-    logoUrl: '/amey-logo.svg',
+    logoUrl: '/amey-logo.png',
     cardBgUrl: '/amey-card.png',
   },
   {
@@ -245,7 +245,7 @@ export const PROVIDERS: ProviderConfig[] = [
     id: 'first-pensions',
     name: 'First Pensions',
     iconUrl: '/first_pension-icon.png',
-    logoUrl: '/first_pension-logo.svg',
+    logoUrl: '/first_pension-logo.png',
     cardBgUrl: '/first_pension-card.png',
   },
   {
@@ -259,7 +259,7 @@ export const PROVIDERS: ProviderConfig[] = [
     id: 'ngukps',
     name: 'ngukps',
     iconUrl: '/ngukps-icon.png',
-    logoUrl: '/ngukps-logo.svg',
+    logoUrl: '/ngukps-logo.png',
     cardBgUrl: '/ngukps-card.png',
   },
   {
@@ -273,7 +273,7 @@ export const PROVIDERS: ProviderConfig[] = [
     id: 'railpen',
     name: 'Railpen',
     iconUrl: '/railpen-icon.png',
-    logoUrl: '/railpen-logo.svg',
+    logoUrl: '/railpen-logo.png',
     cardBgUrl: '/railpen-card.png',
   },
   {
@@ -315,21 +315,21 @@ export const PROVIDERS: ProviderConfig[] = [
     id: 'isio',
     name: 'isio',
     iconUrl: '/isio-icon.png',
-    logoUrl: '/isio-logo.svg',
+    logoUrl: '/isio-logo.png',
     cardBgUrl: '/isio-card.png',
   },
   {
     id: 'broadstone',
     name: 'Broadstone',
     iconUrl: '/broadstone-icon.png',
-    logoUrl: '/broadstone-logo.svg',
+    logoUrl: '/bs-logo.png',
     cardBgUrl: '/broadstone-card.png',
   },
   {
     id: 'barnett-waddingham',
     name: 'Barnett Waddingham',
     iconUrl: '/barnett_waddingham-icon.png',
-    logoUrl: '/barnett_waddingham-logo.svg',
+    logoUrl: '/bw-logo.png',
     cardBgUrl: '/barnett_waddingham-card.png',
   },
   {
@@ -364,14 +364,14 @@ export const PROVIDERS: ProviderConfig[] = [
     id: 'ppf',
     name: 'PPF',
     iconUrl: '/ppf-icon.png',
-    logoUrl: '/ppf-logo.svg',
+    logoUrl: '/ppf-logo.png',
     cardBgUrl: '/ppf-card.png',
   },
   {
     id: 'tpt',
     name: 'TPT',
     iconUrl: '/tpt-icon.png',
-    logoUrl: '/tpt-logo.svg',
+    logoUrl: '/tpt-logo.png',
     cardBgUrl: '/tpt-card.png',
   },
   {
