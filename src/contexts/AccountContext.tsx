@@ -203,7 +203,7 @@ export const PROVIDERS: ProviderConfig[] = [
     id: 'rothesay',
     name: 'Rothesay',
     iconUrl: '/rothesay-icon.png',
-    logoUrl: '/rothesay-logo.svg',
+    logoUrl: '/rothesay-logo.png',
     cardBgUrl: '/rothesay-card.png',
   },
   {
