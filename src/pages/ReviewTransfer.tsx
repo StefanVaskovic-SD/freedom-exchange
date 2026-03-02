@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ArrowLeft, AlertTriangle, ExternalLink } from "lucide-react";
+import { ArrowLeft, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAccounts, AccountType } from "@/contexts/AccountContext";
 
@@ -187,13 +187,6 @@ export const ReviewTransfer: React.FC = () => {
 									})}{" "}
 									less at retirement due to lost growth
 								</p>
-								<a
-									href="/learn/3"
-									className="inline-flex items-center gap-1 text-sm text-foreground underline hover:opacity-70 transition-opacity"
-								>
-									Learn more
-									<ExternalLink className="w-3.5 h-3.5" />
-								</a>
 							</div>
 						</div>
 					</div>
