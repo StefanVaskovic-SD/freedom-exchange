@@ -2,6 +2,10 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 
+// ── Global overscroll lock (applied immediately, before any CSS loads) ─────
+document.documentElement.style.overscrollBehavior = 'none';
+document.body.style.overscrollBehavior = 'none';
+
 // ── Prevent browser back/forward swipe navigation ──────────────────────────
 
 let touchStartX = 0;
