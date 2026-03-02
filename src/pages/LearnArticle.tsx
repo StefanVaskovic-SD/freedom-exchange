@@ -487,7 +487,7 @@ const LearnArticle: React.FC = () => {
 
 					{/* Back Button - preko slike */}
 					<button
-						onClick={() => navigate(-1)}
+						onClick={() => navigate('/learn')}
 						className="absolute top-4 left-4 w-12 h-12 bg-white rounded-full flex items-center justify-center text-black shadow-lg"
 						aria-label="Go back"
 					>
