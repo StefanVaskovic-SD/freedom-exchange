@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAccounts, AccountType } from "@/contexts/AccountContext";
+import { useAccounts, AccountType, CURRENCY_INFO } from "@/contexts/AccountContext";
 
 export const ReviewTransfer: React.FC = () => {
 	const navigate = useNavigate();
@@ -90,8 +90,12 @@ export const ReviewTransfer: React.FC = () => {
 							})}
 						</p>
 						<div className="flex items-center gap-2">
-							<span className="text-2xl">🇬🇧</span>
-							<span className="text-foreground text-sm">GBP (£)</span>
+							<img
+								src={`/${currency.toLowerCase()}.png`}
+								alt={currency}
+								className="w-5 h-5 rounded-full object-cover"
+							/>
+							<span className="text-foreground text-sm">{currency} ({CURRENCY_INFO[currency]?.symbol ?? '£'})</span>
 						</div>
 					</div>
 				</div>
