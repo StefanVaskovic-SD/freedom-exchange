@@ -11,7 +11,6 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 
-const ALL_CURRENCIES = Object.keys(CURRENCY_INFO);
 const FROM_CURRENCIES = ['GBP', 'EUR', 'USD'] as const;
 
 export const ExchangeFunds: React.FC = () => {
@@ -46,7 +45,7 @@ export const ExchangeFunds: React.FC = () => {
   const hasFromError = hasNoFunds || exceedsBalance;
   const isValidAmount = numAmount > 0 && !hasNoFunds && numAmount <= fromBalance && toCurrency !== '';
 
-  const availableToCurrencies = ALL_CURRENCIES.filter(c => c !== fromCurrency);
+  const availableToCurrencies = FROM_CURRENCIES.filter(c => c !== fromCurrency);
   
   const filteredToCurrencies = availableToCurrencies.filter(c => {
     if (!searchQuery) return true;
