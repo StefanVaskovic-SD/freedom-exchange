@@ -142,7 +142,7 @@ export const ExchangeFunds: React.FC = () => {
                   <DrawerHeader>
                     <DrawerTitle className="text-foreground text-xl font-normal">Select currency</DrawerTitle>
                   </DrawerHeader>
-                  <div className="px-4 pb-8">
+                  <div className="px-4" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
                     {FROM_CURRENCIES.map(code => {
                       const info = CURRENCY_INFO[code];
                       const isSelected = code === fromCurrency;
@@ -238,7 +238,7 @@ export const ExchangeFunds: React.FC = () => {
                       />
                     </div>
                   </div>
-                  <div className="px-4 pb-8 max-h-[400px] overflow-y-auto">
+                  <div className="px-4 max-h-[400px] overflow-y-auto" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
                     {filteredToCurrencies.map(code => {
                       const info = CURRENCY_INFO[code];
                       const isSelected = code === toCurrency;
