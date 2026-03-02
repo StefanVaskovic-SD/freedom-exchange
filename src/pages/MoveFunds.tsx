@@ -14,18 +14,14 @@ import {
 type Currency = {
   code: string;
   symbol: string;
-  flag: string;
+  flagImg: string;
   locale: string;
 };
 
 const currencies: Record<string, Currency> = {
-  GBP: { code: 'GBP', symbol: '£', flag: '🇬🇧', locale: 'en-GB' },
-  EUR: { code: 'EUR', symbol: '€', flag: '🇪🇺', locale: 'de-DE' },
-  USD: { code: 'USD', symbol: 'US$', flag: '🇺🇸', locale: 'en-US' },
-  CAD: { code: 'CAD', symbol: 'CA$', flag: '🇨🇦', locale: 'en-CA' },
-  AUD: { code: 'AUD', symbol: 'A$', flag: '🇦🇺', locale: 'en-AU' },
-  JPY: { code: 'JPY', symbol: '¥', flag: '🇯🇵', locale: 'ja-JP' },
-  CHF: { code: 'CHF', symbol: 'CHF', flag: '🇨🇭', locale: 'de-CH' },
+  GBP: { code: 'GBP', symbol: '£', flagImg: '/gbp.png', locale: 'en-GB' },
+  EUR: { code: 'EUR', symbol: '€', flagImg: '/eur.png', locale: 'de-DE' },
+  USD: { code: 'USD', symbol: 'US$', flagImg: '/usd.png', locale: 'en-US' },
 };
 
 export const MoveFunds: React.FC = () => {
@@ -125,11 +121,14 @@ export const MoveFunds: React.FC = () => {
           <Select value={currency} onValueChange={setCurrency}>
             <SelectTrigger className="mt-4 w-auto bg-white dark:bg-[#211E1E] border border-border text-foreground hover:bg-gray-50 dark:hover:bg-[#2a2626] transition-colors">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">{currencies[currency].flag}</span>
+                <img
+                  src={currencies[currency].flagImg}
+                  alt={currency}
+                  className="w-7 h-7 rounded-full object-cover"
+                />
                 <SelectValue>
                   {currency} ({currencies[currency].symbol})
                 </SelectValue>
-                {/* <ChevronDown className="w-4 h-4 ml-1" /> */}
               </div>
             </SelectTrigger>
             <SelectContent className="bg-white dark:bg-[#211E1E] border-border text-foreground">
@@ -140,7 +139,11 @@ export const MoveFunds: React.FC = () => {
                   className="hover:bg-gray-100 dark:hover:bg-[#2a2626] focus:bg-gray-100 dark:focus:bg-[#2a2626] focus:text-foreground cursor-pointer"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-xl">{curr.flag}</span>
+                    <img
+                      src={curr.flagImg}
+                      alt={code}
+                      className="w-6 h-6 rounded-full object-cover"
+                    />
                     <span>{code} ({curr.symbol})</span>
                   </div>
                 </SelectItem>
