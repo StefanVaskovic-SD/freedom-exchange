@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { ArrowLeft, ArrowDown } from 'lucide-react';
 import { useAccounts, AccountType } from '@/contexts/AccountContext';
 import { Button } from '@/components/ui/button';
@@ -30,10 +30,9 @@ export const MoveFunds: React.FC = () => {
   const [amount, setAmount] = useState('');
   const [currency, setCurrency] = useState<string>('GBP');
   
-  // Redirect to home if accessed without proper state
+  // Redirect to home if accessed without proper state (e.g. on hard refresh)
   if (!location.state?.sourceAccount || !location.state?.destinationAccount) {
-    navigate('/', { replace: true });
-    return null;
+    return <Navigate to="/" replace />;
   }
   
   const { sourceAccount, destinationAccount } = location.state as { 

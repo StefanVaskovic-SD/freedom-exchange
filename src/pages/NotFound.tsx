@@ -10,7 +10,7 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-between px-4 py-10 max-w-[480px] mx-auto">
+    <div className="min-h-screen bg-[#F3F3F3] dark:bg-black flex flex-col items-center justify-between px-4 py-10 max-w-[480px] mx-auto">
       <div className="flex-1 flex flex-col items-center justify-center gap-10">
         {/* Icon */}
         <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -27,9 +27,9 @@ const NotFound = () => {
 
         {/* Text */}
         <div className="flex flex-col items-center gap-2">
-          <span style={{ fontSize: '64px', lineHeight: 1, color: '#ffffff', fontWeight: 'normal' }}>404</span>
-          <span style={{ fontSize: '24px', color: '#ffffff', fontWeight: 'normal' }}>Page not found</span>
-          <span style={{ fontSize: '20px', color: 'rgba(255,255,255,0.7)', fontWeight: 'normal', textAlign: 'center' }}>
+          <span className="text-foreground font-normal" style={{ fontSize: '64px', lineHeight: 1 }}>404</span>
+          <span className="text-foreground font-normal" style={{ fontSize: '24px' }}>Page not found</span>
+          <span className="text-foreground/70 font-normal text-center" style={{ fontSize: '20px' }}>
             The page you're looking for doesn't exist.
           </span>
         </div>
@@ -38,7 +38,7 @@ const NotFound = () => {
       {/* Button */}
       <button
         onClick={() => navigate('/')}
-        className="w-full h-14 rounded-lg text-xl font-normal bg-[#A488F5] text-black"
+        className="w-full h-14 rounded-lg text-xl font-normal bg-[#A488F5] text-white dark:text-black"
       >
         Back to home page
       </button>

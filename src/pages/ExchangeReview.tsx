@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CURRENCY_INFO, getExchangeRate } from '@/contexts/AccountContext';
@@ -17,8 +17,7 @@ export const ExchangeReview: React.FC = () => {
   };
 
   if (!fromCurrency || !toCurrency) {
-    navigate('/', { replace: true });
-    return null;
+    return <Navigate to="/" replace />;
   }
 
   const fromInfo = CURRENCY_INFO[fromCurrency];
