@@ -131,8 +131,8 @@ export const HomeDark: React.FC = () => {
 					onClick={() => setProviderDrawerOpen(true)}
 				>
 					<div className="flex items-center gap-2.5">
-						{currentProvider.iconUrl
-							? <img src={currentProvider.iconUrl} alt={currentProvider.name} className="w-7 h-7 rounded-full object-contain" />
+					{currentProvider.iconUrl
+						? <img src={currentProvider.iconUrl} alt={currentProvider.name} className="w-7 h-7 rounded-full object-contain" style={{ border: '1px solid #1a1a1a' }} />
 							: <div className="w-7 h-7 rounded-full bg-[#A488F5] flex items-center justify-center text-white text-xs font-semibold">
 									{currentProvider.name.charAt(0)}
 								</div>
@@ -220,8 +220,8 @@ export const HomeDark: React.FC = () => {
 											onClick={() => handleSwitchProvider(provider.id)}
 										>
 											<div className="flex items-center gap-3">
-												{provider.iconUrl
-													? <img src={provider.iconUrl} alt={provider.name} className="w-8 h-8 rounded-full object-contain" />
+											{provider.iconUrl
+												? <img src={provider.iconUrl} alt={provider.name} className="w-8 h-8 rounded-full object-contain" style={{ border: '1px solid #1a1a1a' }} />
 													: <div className="w-8 h-8 rounded-full bg-[#A488F5] flex items-center justify-center text-white text-sm font-semibold">
 															{provider.name.charAt(0)}
 														</div>
