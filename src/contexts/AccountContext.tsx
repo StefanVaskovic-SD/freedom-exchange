@@ -301,7 +301,7 @@ export const PROVIDERS: ProviderConfig[] = [
     id: 'first-actuarial',
     name: 'First Actuarial',
     iconUrl: '/first_actuarial-icon.png',
-    logoUrl: '/first_actuarial-logo.svg',
+    logoUrl: '/first_actuarial-logo.png',
     cardBgUrl: '/first_actuarial-card.png',
   },
   {
