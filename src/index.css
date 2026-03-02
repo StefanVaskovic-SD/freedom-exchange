@@ -8,6 +8,8 @@
 
 html, body {
   overscroll-behavior: none;
+  /* Hint to the browser: only vertical panning is intended — disables horizontal gesture recognition */
+  touch-action: pan-y;
 }
 
 .no-scrollbar::-webkit-scrollbar {
