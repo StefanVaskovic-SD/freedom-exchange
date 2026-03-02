@@ -245,7 +245,7 @@ export const PROVIDERS: ProviderConfig[] = [
     id: 'first-pensions',
     name: 'First Pensions',
     iconUrl: '/first_pension-icon.png',
-    logoUrl: '/first_pension-logo.png',
+    logoUrl: '/first_pension-logo.svg',
     cardBgUrl: '/first_pension-card.png',
   },
   {
