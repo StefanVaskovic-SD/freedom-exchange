@@ -450,7 +450,7 @@ const Convert: React.FC = () => {
 									key={code}
 									onClick={() => handleCurrencySelect(code)}
 									className={`w-full flex items-center justify-between py-4 px-2 rounded-lg transition-colors ${
-										isSelected ? 'bg-[#F3F3F3] dark:bg-[#2C2C2E] border border-[#A488F5]' : 'hover:bg-[#F3F3F3] dark:hover:bg-[#2C2C2E]'
+										isSelected ? 'bg-[#F3F3F3] dark:bg-[#2C2C2E] border border-[#A488F5]' : ''
 									}`}
 								>
 									<div className="flex items-center gap-3">
