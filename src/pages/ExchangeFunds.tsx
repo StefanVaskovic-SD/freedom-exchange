@@ -243,7 +243,7 @@ export const ExchangeFunds: React.FC = () => {
         </Drawer>
 
         {/* Exchange Rate */}
-        <div className="mt-6">
+        <div className="mt-2">
           <p className="text-[#716860] text-sm">Exchange rate</p>
           {toCurrency ? (
             <p className="text-[#A488F5] text-base font-normal">
