@@ -20,6 +20,14 @@ html, body {
   scrollbar-width: none;
 }
 
+/* Currency & provider flag images — light mode border, transparent in dark */
+img.flag-img {
+  border: 1px solid #dadada;
+}
+.dark img.flag-img {
+  border-color: transparent;
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */

@@ -218,7 +218,7 @@ const AccountDetail: React.FC = () => {
 												isActive ? 'border-[#716860] dark:border-white' : 'border-white dark:border-[#211E1E]'
 											}`}
 										>
-											<img src={`/${code.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={code} />
+											<img src={`/${code.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover flag-img" alt={code} />
 											{code} ({info.symbol})
 										</button>
 									);
@@ -228,7 +228,7 @@ const AccountDetail: React.FC = () => {
 							{/* Currency Balance Card */}
 							<div className="bg-white dark:bg-[#211E1E] rounded-[9px] px-4 py-5 mb-4 flex flex-col justify-between h-[160px]">
 								<div className="flex items-center gap-3 mb-3">
-									<img src={`/${selectedCurrency.toLowerCase()}.png`} className="w-10 h-10 rounded-full object-cover" alt={selectedCurrency} />
+									<img src={`/${selectedCurrency.toLowerCase()}.png`} className="w-10 h-10 rounded-full object-cover flag-img" alt={selectedCurrency} />
 									<span className="text-foreground text-lg font-normal">{selectedCurrency}</span>
 									<span className="ml-auto">
 										{(() => {

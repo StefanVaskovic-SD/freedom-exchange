@@ -141,7 +141,7 @@ export const ExchangeFunds: React.FC = () => {
             <div className="flex items-center justify-between mb-1">
               <span className="text-foreground/70 text-base">From</span>
               <button className="flex items-center gap-1 text-foreground" onClick={openFromDrawer}>
-                <img src={`/${fromCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={fromCurrency} />
+                <img src={`/${fromCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover flag-img" alt={fromCurrency} />
                 <span className="text-sm font-normal">{fromCurrency} ({CURRENCY_INFO[fromCurrency].symbol})</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
               </button>
@@ -189,7 +189,7 @@ export const ExchangeFunds: React.FC = () => {
               <button className="flex items-center gap-1 text-foreground" onClick={openToDrawer}>
                 {toCurrency ? (
                   <>
-                    <img src={`/${toCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={toCurrency} />
+                    <img src={`/${toCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover flag-img" alt={toCurrency} />
                     <span className="text-sm font-normal">{toCurrency} ({CURRENCY_INFO[toCurrency].symbol})</span>
                   </>
                 ) : (
@@ -244,7 +244,7 @@ export const ExchangeFunds: React.FC = () => {
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <img src={`/${code.toLowerCase()}.png`} className="w-8 h-8 rounded-full object-cover" alt={code} />
+                      <img src={`/${code.toLowerCase()}.png`} className="w-8 h-8 rounded-full object-cover flag-img" alt={code} />
                       <span className="text-foreground text-base">{info.code} ({info.symbol})  {info.name}</span>
                     </div>
                     {isSelected && <Check className="w-5 h-5 text-[#A488F5]" />}

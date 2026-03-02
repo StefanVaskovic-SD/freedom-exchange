@@ -123,7 +123,7 @@ export const MoveFunds: React.FC = () => {
                 <img
                   src={currencies[currency].flagImg}
                   alt={currency}
-                  className="w-6 h-6 rounded-full object-cover"
+                  className="w-6 h-6 rounded-full object-cover flag-img"
                 />
                 <SelectValue>
                   {currency} ({currencies[currency].symbol})
@@ -141,7 +141,7 @@ export const MoveFunds: React.FC = () => {
                     <img
                       src={curr.flagImg}
                       alt={code}
-                      className="w-6 h-6 rounded-full object-cover"
+                      className="w-6 h-6 rounded-full object-cover flag-img"
                     />
                     <span>{code} ({curr.symbol})</span>
                   </div>

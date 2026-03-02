@@ -93,7 +93,7 @@ export const ReviewTransfer: React.FC = () => {
 							<img
 								src={`/${currency.toLowerCase()}.png`}
 								alt={currency}
-								className="w-5 h-5 rounded-full object-cover"
+								className="w-5 h-5 rounded-full object-cover flag-img"
 							/>
 							<span className="text-foreground text-sm">{currency} ({CURRENCY_INFO[currency]?.symbol ?? '£'})</span>
 						</div>

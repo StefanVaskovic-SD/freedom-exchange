@@ -234,7 +234,7 @@ const Convert: React.FC = () => {
 											: 'border-white dark:border-[#211E1E]'
 									}`}
 								>
-									<img src={`/${code.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={code} />
+									<img src={`/${code.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover flag-img" alt={code} />
 									{code} ({info.symbol})
 								</button>
 							);
@@ -244,7 +244,7 @@ const Convert: React.FC = () => {
 					{/* Currency Balance Card */}
 					<div className="bg-white dark:bg-[#211E1E] rounded-[9px] px-4 py-5 mb-4 flex flex-col justify-between h-[160px]">
 						<div className="flex items-center gap-3 mb-3">
-							<img src={`/${selectedCurrency.toLowerCase()}.png`} className="w-10 h-10 rounded-full object-cover" alt={selectedCurrency} />
+							<img src={`/${selectedCurrency.toLowerCase()}.png`} className="w-10 h-10 rounded-full object-cover flag-img" alt={selectedCurrency} />
 							<span className="text-foreground text-lg font-normal">{selectedCurrency}</span>
 							<span className="ml-auto">
 								{(() => {
@@ -285,7 +285,7 @@ const Convert: React.FC = () => {
 							<div className="flex items-center justify-between mb-1">
 								<span className="text-foreground/70 text-base">From</span>
 								<button className="flex items-center gap-1 text-foreground" onClick={openFromDrawer}>
-									<img src={`/${fromCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={fromCurrency} />
+									<img src={`/${fromCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover flag-img" alt={fromCurrency} />
 									<span className="text-sm font-normal">{fromCurrency} ({CURRENCY_INFO[fromCurrency].symbol})</span>
 									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
 								</button>
@@ -337,7 +337,7 @@ const Convert: React.FC = () => {
 								<button className="flex items-center gap-1 text-foreground" onClick={openToDrawer}>
 									{toCurrency ? (
 										<>
-											<img src={`/${toCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover" alt={toCurrency} />
+											<img src={`/${toCurrency.toLowerCase()}.png`} className="w-5 h-5 rounded-full object-cover flag-img" alt={toCurrency} />
 											<span className="text-sm font-normal">{toCurrency} ({CURRENCY_INFO[toCurrency].symbol})</span>
 										</>
 									) : (
@@ -468,7 +468,7 @@ const Convert: React.FC = () => {
 									}`}
 								>
 									<div className="flex items-center gap-3">
-										<img src={`/${code.toLowerCase()}.png`} className="w-8 h-8 rounded-full object-cover" alt={code} />
+										<img src={`/${code.toLowerCase()}.png`} className="w-8 h-8 rounded-full object-cover flag-img" alt={code} />
 										<span className="text-foreground text-base">
 											{info.code} ({info.symbol})  {info.name}
 										</span>
