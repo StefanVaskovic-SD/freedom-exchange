@@ -6,6 +6,10 @@
   outline: none;
 }
 
+html, body {
+  overscroll-behavior-x: none;
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
