@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Search, Check } from 'lucide-react';
 import { useAccounts, CURRENCY_INFO, convertCurrency, getExchangeRate } from '@/contexts/AccountContext';
 import { Button } from '@/components/ui/button';
@@ -15,8 +15,12 @@ const FROM_CURRENCIES = ['GBP', 'EUR', 'USD'] as const;
 
 export const ExchangeFunds: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { accounts } = useAccounts();
-  const [fromCurrency, setFromCurrency] = useState<string>('GBP');
+  const initialFrom = (location.state as any)?.fromCurrency;
+  const [fromCurrency, setFromCurrency] = useState<string>(
+    FROM_CURRENCIES.includes(initialFrom) ? initialFrom : 'GBP'
+  );
   const [toCurrency, setToCurrency] = useState<string>('');
   const [amount, setAmount] = useState('');
   const [fromCurrencyDrawerOpen, setFromCurrencyDrawerOpen] = useState(false);
