@@ -242,8 +242,20 @@ export const ExchangeFunds: React.FC = () => {
           </DrawerContent>
         </Drawer>
 
+        {/* Exchange Rate */}
+        <div className="mt-6">
+          <p className="text-[#716860] text-sm">Exchange rate</p>
+          {toCurrency ? (
+            <p className="text-[#A488F5] text-base font-normal">
+              1 {toCurrency} = {exchangeRate.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {fromCurrency}
+            </p>
+          ) : (
+            <p className="text-[#716860] text-base font-normal">-- --</p>
+          )}
+        </div>
+
         {/* Next Button */}
-        <div className="mt-6 mb-4">
+        <div className="mt-2 mb-4">
           <Button
             onClick={handleNext}
             disabled={!isValidAmount}
@@ -255,18 +267,6 @@ export const ExchangeFunds: React.FC = () => {
           >
             Next
           </Button>
-        </div>
-
-        {/* Exchange Rate */}
-        <div className="mt-2">
-          <p className="text-[#716860] text-sm">Exchange rate</p>
-          {toCurrency ? (
-            <p className="text-[#A488F5] text-base font-normal">
-              1 {toCurrency} = {exchangeRate.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {fromCurrency}
-            </p>
-          ) : (
-            <p className="text-[#716860] text-base font-normal">-- --</p>
-          )}
         </div>
       </div>
     </div>

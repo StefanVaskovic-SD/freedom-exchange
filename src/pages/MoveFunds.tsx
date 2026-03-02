@@ -119,7 +119,7 @@ export const MoveFunds: React.FC = () => {
           
           {/* Currency Selector */}
           <Select value={currency} onValueChange={setCurrency}>
-            <SelectTrigger className="mt-4 w-auto bg-white dark:bg-[#211E1E] border border-border text-foreground hover:bg-gray-50 dark:hover:bg-[#2a2626] transition-colors rounded-[30px] px-3 py-1.5 h-auto">
+            <SelectTrigger className="mt-4 w-auto bg-white dark:bg-[#211E1E] border-none text-foreground hover:bg-gray-50 dark:hover:bg-[#2a2626] transition-colors rounded-[30px] px-3 py-1.5 h-auto gap-2">
               <div className="flex items-center gap-2">
                 <img
                   src={currencies[currency].flagImg}

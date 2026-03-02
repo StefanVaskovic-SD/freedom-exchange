@@ -342,32 +342,32 @@ const Convert: React.FC = () => {
 							</div>
 						</div>
 
-						{/* Next Button */}
-						<div className="mt-6 mb-4">
-							<Button
-								onClick={handleExchangeNext}
-								disabled={!isValidExchange}
-								className={`w-full h-14 text-xl rounded-lg font-normal ${
-									isValidExchange
-										? 'bg-[#A488F5] hover:bg-[#9575e8] text-white dark:text-black'
-										: 'bg-[#2a2626] text-[#716860] cursor-not-allowed'
-								}`}
-							>
-								Next
-							</Button>
-						</div>
+					{/* Exchange Rate */}
+					<div className="mt-6">
+						<p className="text-[#716860] text-sm">Exchange rate</p>
+						{toCurrency ? (
+							<p className="text-[#A488F5] text-base font-normal">
+								1 {toCurrency} = {exchangeRate.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {fromCurrency}
+							</p>
+						) : (
+							<p className="text-[#716860] text-base font-normal">-- --</p>
+						)}
+					</div>
 
-						{/* Exchange Rate */}
-						<div>
-							<p className="text-[#716860] text-sm">Exchange rate</p>
-							{toCurrency ? (
-								<p className="text-[#A488F5] text-base font-normal">
-									1 {toCurrency} = {exchangeRate.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {fromCurrency}
-								</p>
-							) : (
-								<p className="text-[#716860] text-base font-normal">-- --</p>
-							)}
-						</div>
+					{/* Next Button */}
+					<div className="mt-2 mb-4">
+						<Button
+							onClick={handleExchangeNext}
+							disabled={!isValidExchange}
+							className={`w-full h-14 text-xl rounded-lg font-normal ${
+								isValidExchange
+									? 'bg-[#A488F5] hover:bg-[#9575e8] text-white dark:text-black'
+									: 'bg-[#2a2626] text-[#716860] cursor-not-allowed'
+							}`}
+						>
+							Next
+						</Button>
+					</div>
 					</div>
 
 					{/* TRANSACTIONS */}
