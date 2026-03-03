@@ -96,13 +96,13 @@ export const CreditCard: React.FC<CreditCardProps> = ({
 						{/* Hidden state */}
 						<div className="relative h-7 flex items-center">
 							<span
-								className="text-white text-lg font-normal transition-opacity duration-300 absolute"
+								className="text-white text-xl font-mono tracking-wider transition-opacity duration-300 absolute"
 								style={{ opacity: revealed ? 0 : 1 }}
 							>
-								••••
+								•••
 							</span>
 							<span
-								className="text-white text-lg font-normal transition-opacity duration-300 absolute"
+								className="text-white text-xl font-mono tracking-wider transition-opacity duration-300 absolute"
 								style={{ opacity: revealed ? 1 : 0 }}
 							>
 								{cvv}
