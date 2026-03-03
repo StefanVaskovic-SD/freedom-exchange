@@ -281,7 +281,7 @@ const AccountDetail: React.FC = () => {
 						cardholderName="Peter Smith"
 						cardNumber="4562"
 						validUntil="04/28"
-						cvv="***"
+						cvv="345"
 						bankName={currentProvider.name}
 						cardType="freedom"
 						cardBgUrl={currentProvider.cardBgUrl}
