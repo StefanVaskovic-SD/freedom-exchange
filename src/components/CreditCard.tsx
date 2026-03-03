@@ -71,15 +71,15 @@ export const CreditCard: React.FC<CreditCardProps> = ({
 				<div className="mb-6 h-7 flex items-center">
 					{/* Hidden state */}
 					<span
-						className="text-white text-xl font-mono tracking-wider transition-opacity duration-300 absolute"
-						style={{ opacity: revealed ? 0 : 1 }}
+						className="text-white text-xl tracking-wider transition-opacity duration-300 absolute"
+						style={{ opacity: revealed ? 0 : 1, fontFamily: "'Founders Grotesk', sans-serif" }}
 					>
 						•••• •••• •••• {lastFour}
 					</span>
 					{/* Revealed state */}
 					<span
-						className="text-white text-xl font-mono tracking-wider transition-opacity duration-300 absolute"
-						style={{ opacity: revealed ? 1 : 0 }}
+						className="text-white text-xl tracking-wider transition-opacity duration-300 absolute"
+						style={{ opacity: revealed ? 1 : 0, fontFamily: "'Founders Grotesk', sans-serif" }}
 					>
 						2222 4444 3215 {lastFour}
 					</span>
@@ -96,14 +96,14 @@ export const CreditCard: React.FC<CreditCardProps> = ({
 						{/* Hidden state */}
 						<div className="relative h-7 flex items-center">
 							<span
-								className="text-white text-xl font-mono tracking-wider transition-opacity duration-300 absolute"
-								style={{ opacity: revealed ? 0 : 1 }}
+								className="text-white tracking-wider transition-opacity duration-300 absolute"
+								style={{ opacity: revealed ? 0 : 1, fontSize: '18px', fontFamily: "'Founders Grotesk', sans-serif" }}
 							>
 								•••
 							</span>
 							<span
-								className="text-white text-xl font-mono tracking-wider transition-opacity duration-300 absolute"
-								style={{ opacity: revealed ? 1 : 0 }}
+								className="text-white tracking-wider transition-opacity duration-300 absolute"
+								style={{ opacity: revealed ? 1 : 0, fontSize: '18px', fontFamily: "'Founders Grotesk', sans-serif" }}
 							>
 								{cvv}
 							</span>
