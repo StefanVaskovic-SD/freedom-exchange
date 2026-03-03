@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { MercerLogo } from "./MercerLogo";
 
 interface CreditCardProps {
@@ -16,25 +16,50 @@ export const CreditCard: React.FC<CreditCardProps> = ({
 	cardholderName,
 	cardNumber,
 	validUntil,
-	cvv = "***",
+	cvv = "345",
 	bankName,
 	cardType,
 	cardBgUrl = '/card-background.webp',
 	providerLogoUrl,
 }) => {
+	const [revealed, setRevealed] = useState(false);
+
+	// Extract last 4 digits from cardNumber prop (e.g. "•••• ••• •••• 4552" → "4552")
+	const lastFour = cardNumber.replace(/\D/g, '').slice(-4) || '4552';
+
 	return (
 		<div
 			className="relative bg-cover bg-center rounded-[9px] p-6 flex flex-col justify-between overflow-hidden"
 			style={{ backgroundImage: `url('${cardBgUrl}')` }}
 		>
-			{/* Menu button - absolute top right */}
-			<div className="absolute top-6 right-6 z-20 w-10 h-10 rounded-full bg-black flex items-center justify-center">
-				<div className="flex flex-col gap-1">
-					<div className="w-1 h-1 rounded-full bg-white"></div>
-					<div className="w-1 h-1 rounded-full bg-white"></div>
-					<div className="w-1 h-1 rounded-full bg-white"></div>
-				</div>
-			</div>
+			{/* Eye toggle button */}
+			<button
+				onClick={() => setRevealed(v => !v)}
+				className="absolute top-6 right-6 z-20 w-10 h-10 rounded-full bg-black flex items-center justify-center"
+				aria-label={revealed ? 'Hide card details' : 'Show card details'}
+			>
+				{revealed ? (
+					/* Eye open */
+					<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<mask id="mask0_2097_3600" style={{ maskType: 'alpha' }} maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20">
+							<rect width="20" height="20" fill="#D9D9D9"/>
+						</mask>
+						<g mask="url(#mask0_2097_3600)">
+							<path d="M12.6559 12.9062C13.3851 12.1771 13.7497 11.2917 13.7497 10.25C13.7497 9.20833 13.3851 8.32292 12.6559 7.59375C11.9268 6.86458 11.0413 6.5 9.99967 6.5C8.95801 6.5 8.07259 6.86458 7.34342 7.59375C6.61426 8.32292 6.24967 9.20833 6.24967 10.25C6.24967 11.2917 6.61426 12.1771 7.34342 12.9062C8.07259 13.6354 8.95801 14 9.99967 14C11.0413 14 11.9268 13.6354 12.6559 12.9062ZM8.40593 11.8438C7.96843 11.4062 7.74967 10.875 7.74967 10.25C7.74967 9.625 7.96843 9.09375 8.40593 8.65625C8.84343 8.21875 9.37467 8 9.99967 8C10.6247 8 11.1559 8.21875 11.5934 8.65625C12.0309 9.09375 12.2497 9.625 12.2497 10.25C12.2497 10.875 12.0309 11.4062 11.5934 11.8438C11.1559 12.2813 10.6247 12.5 9.99967 12.5C9.37467 12.5 8.84343 12.2813 8.40593 11.8438ZM4.45801 14.8021C2.79134 13.6701 1.58301 12.1528 0.833008 10.25C1.58301 8.34722 2.79134 6.82986 4.45801 5.69792C6.12467 4.56597 7.9719 4 9.99967 4C12.0275 4 13.8747 4.56597 15.5413 5.69792C17.208 6.82986 18.4163 8.34722 19.1663 10.25C18.4163 12.1528 17.208 13.6701 15.5413 14.8021C13.8747 15.934 12.0275 16.5 9.99967 16.5C7.9719 16.5 6.12467 15.934 4.45801 14.8021Z" fill="white"/>
+						</g>
+					</svg>
+				) : (
+					/* Eye off */
+					<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<mask id="mask0_2097_3587" style={{ maskType: 'alpha' }} maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20">
+							<rect width="20" height="20" fill="white"/>
+						</mask>
+						<g mask="url(#mask0_2097_3587)">
+							<path d="M16.5002 18.5L13.0002 15.0417C12.5141 15.1944 12.0245 15.309 11.5314 15.3854C11.0384 15.4618 10.5279 15.5 10.0002 15.5C7.90294 15.5 6.03489 14.9201 4.396 13.7604C2.75711 12.6007 1.56961 11.0972 0.833496 9.25C1.12516 8.51389 1.49322 7.82986 1.93766 7.19792C2.38211 6.56597 2.88905 6 3.4585 5.5L1.16683 3.16667L2.3335 2L17.6668 17.3333L16.5002 18.5ZM10.0002 13C10.1529 13 10.2953 12.9931 10.4272 12.9792C10.5592 12.9653 10.7016 12.9375 10.8543 12.8958L6.35433 8.39583C6.31266 8.54861 6.28489 8.69097 6.271 8.82292C6.25711 8.95486 6.25016 9.09722 6.25016 9.25C6.25016 10.2917 6.61475 11.1771 7.34391 11.9062C8.07308 12.6354 8.9585 13 10.0002 13ZM16.0835 13.375L13.4377 10.75C13.5349 10.5139 13.6113 10.2743 13.6668 10.0312C13.7224 9.78819 13.7502 9.52778 13.7502 9.25C13.7502 8.20833 13.3856 7.32292 12.6564 6.59375C11.9272 5.86458 11.0418 5.5 10.0002 5.5C9.72239 5.5 9.46197 5.52778 9.21891 5.58333C8.97586 5.63889 8.73627 5.72222 8.50016 5.83333L6.37516 3.70833C6.94461 3.47222 7.52794 3.29514 8.12516 3.17708C8.72239 3.05903 9.34739 3 10.0002 3C12.0974 3 13.9654 3.57986 15.6043 4.73958C17.2432 5.89931 18.4307 7.40278 19.1668 9.25C18.8474 10.0694 18.4272 10.8299 17.9064 11.5313C17.3856 12.2326 16.7779 12.8472 16.0835 13.375ZM12.2293 9.54167L9.72933 7.04167C10.1182 6.97222 10.4759 7.00347 10.8022 7.13542C11.1286 7.26736 11.4099 7.45833 11.646 7.70833C11.8821 7.95833 12.0522 8.24653 12.1564 8.57292C12.2606 8.89931 12.2849 9.22222 12.2293 9.54167Z" fill="white"/>
+						</g>
+					</svg>
+				)}
+			</button>
 
 			{/* Card details */}
 			<div className="relative z-10">
@@ -43,9 +68,21 @@ export const CreditCard: React.FC<CreditCardProps> = ({
 				</div>
 
 				{/* Card number */}
-				<div className="mb-6">
-					<span className="text-white text-xl font-mono tracking-wider">•••• </span>
-					<span className="text-white text-xl font-mono tracking-wider">{cardNumber}</span>
+				<div className="mb-6 h-7 flex items-center">
+					{/* Hidden state */}
+					<span
+						className="text-white text-xl font-mono tracking-wider transition-opacity duration-300 absolute"
+						style={{ opacity: revealed ? 0 : 1 }}
+					>
+						•••• •••• •••• {lastFour}
+					</span>
+					{/* Revealed state */}
+					<span
+						className="text-white text-xl font-mono tracking-wider transition-opacity duration-300 absolute"
+						style={{ opacity: revealed ? 1 : 0 }}
+					>
+						2222 4444 3215 {lastFour}
+					</span>
 				</div>
 
 				{/* Valid and CVV */}
@@ -56,17 +93,31 @@ export const CreditCard: React.FC<CreditCardProps> = ({
 					</div>
 					<div>
 						<div className="text-white text-base opacity-80 mb-1">CVV</div>
-						<div className="text-white text-lg font-normal">{cvv}</div>
+						{/* Hidden state */}
+						<div className="relative h-7 flex items-center">
+							<span
+								className="text-white text-lg font-normal transition-opacity duration-300 absolute"
+								style={{ opacity: revealed ? 0 : 1 }}
+							>
+								••••
+							</span>
+							<span
+								className="text-white text-lg font-normal transition-opacity duration-300 absolute"
+								style={{ opacity: revealed ? 1 : 0 }}
+							>
+								{cvv}
+							</span>
+						</div>
 					</div>
 				</div>
 			</div>
 
-		{/* Bottom logos row */}
-		<div className="flex justify-between items-end w-full relative z-10">
-			{providerLogoUrl
-				? <img src={providerLogoUrl} alt="Provider logo" className="h-4 object-contain" />
-				: <MercerLogo />
-			}
+			{/* Bottom logos row */}
+			<div className="flex justify-between items-end w-full relative z-10">
+				{providerLogoUrl
+					? <img src={providerLogoUrl} alt="Provider logo" className="h-4 object-contain" />
+					: <MercerLogo />
+				}
 				<svg xmlns="http://www.w3.org/2000/svg" width="78" height="20" viewBox="0 0 78 20" fill="none">
 					<g clipPath="url(#clip0_1649_2127)">
 						<path d="M71.5714 17.5091H69.7675V17.1985C69.7675 15.2084 69.7754 13.2189 69.7624 11.2289C69.7591 10.6977 69.6288 10.1833 69.3661 9.71509C69.1108 9.25957 68.7015 9.01016 68.2212 8.8895C67.5447 8.71919 66.8886 8.81445 66.3186 9.22551C65.6704 9.69373 65.2583 10.3681 65.216 11.17C65.1427 12.5567 65.1602 13.9487 65.1461 15.3389C65.1388 16.0571 65.145 16.7753 65.145 17.5079H63.3613V7.67594H65.1281V9.21107C65.8603 7.91785 66.985 7.34282 68.3802 7.38497C69.8036 7.42769 70.8657 8.01542 71.3595 9.45125C71.55 9.16431 71.7129 8.84735 71.9401 8.59102C72.5518 7.90053 73.3083 7.50332 74.2362 7.41845C75.062 7.3434 75.8405 7.44847 76.5491 7.88667C77.3564 8.38549 77.7245 9.19433 77.8767 10.1042C77.9624 10.6169 77.9895 11.144 77.9928 11.6653C78.0064 13.5012 77.9979 15.3372 77.9979 17.1737V17.5039H76.194V17.1846C76.194 15.2044 76.2041 13.2241 76.1878 11.2439C76.1833 10.6758 76.0474 10.1279 75.7357 9.63541C75.4527 9.18856 75.0344 8.9761 74.553 8.87276C73.0174 8.54368 71.7524 9.76647 71.6396 11.2029C71.5607 12.2034 71.5827 13.2126 71.5743 14.2183C71.5647 15.3043 71.572 16.3902 71.572 17.5091H71.5714Z" fill="white"/>
